@@ -1,12 +1,16 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
+import Vue from 'vue'
+import Index from './views/index'
+import router from './router'
+import store from './store'
 
-Vue.config.productionTip = false;
+import './assets/scss/default/compile/bootstrap.scss'
+import './assets/scss/default/compile/bootstrap_limitless.scss'
+import './assets/fonts/icons/icomoon/styles.css'
+
+Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount("#app");
+  render: h => h(Index)
+}).$mount('#app')
