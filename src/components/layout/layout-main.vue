@@ -3,7 +3,7 @@
     <navbar></navbar>
 
     <div class="page-content">
-      <sidebar :menu="menu"></sidebar>
+      <sidebar :menu="menu" @on:item:click="onMenuItemClick"></sidebar>
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@
 import Navbar from '../navbar/navbar'
 import Sidebar from '../sidebar/sidebar'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'LayoutMain',
@@ -24,6 +24,14 @@ export default {
 
   computed: {
     ...mapGetters('sidebar', ['menu'])
+  },
+
+  methods: {
+    ...mapActions('sidebar', ['expandMenuItem']),
+    onMenuItemClick(item) {
+      if (item.children && item.children.length) this.expandMenuItem(item)
+      else if (item.onClick) item.onClick(item)
+    }
   }
 }
 </script>

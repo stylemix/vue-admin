@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   name: 'SidebarMenuItem',
 
@@ -57,10 +55,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('sidebar', ['expandMenuItem']),
     onItemClick(item) {
       if (item.children && item.children.length) {
-        this.expandMenuItem(item)
+        this.$emit('on:click', item)
       } else if (item.onClick) item.onClick(item)
     }
   }

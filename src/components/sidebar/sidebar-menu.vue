@@ -5,6 +5,7 @@
         v-for="(item, index) in menu"
         :key="index"
         :item="item"
+        @on:click="$emit('on:click', $event)"
       ></sidebar-menu-item>
     </ul>
   </div>

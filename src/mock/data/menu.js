@@ -15,7 +15,10 @@ export default [
         text: 'Horizontal navigation'
       },
       {
-        text: 'No sidebar'
+        text: 'No sidebar',
+        onClick(item) {
+          console.log(`${item.text} clicked`)
+        }
       },
       {
         text: '1 sidebar'

@@ -45,7 +45,10 @@
       </div>
       <!-- /user menu -->
 
-      <sidebar-menu :menu="menu"></sidebar-menu>
+      <sidebar-menu
+        :menu="menu"
+        @on:click="$emit('on:item:click', $event)"
+      ></sidebar-menu>
     </div>
     <!-- /sidebar content -->
   </div>
