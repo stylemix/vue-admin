@@ -41,7 +41,7 @@ $hover-shadow-lighter:                    0 0 0 62.5rem rgba($black, 0.01) inset
 $hover-shadow-darker:                     0 0 0 62.5rem rgba($black, 0.04) inset !default;
 
 // Images
-$img-path:                                '../../../images' !default;
+$img-path:                                '../images' !default;
 $img-preview-max-height:                  5rem !default;
 
 // Wrappers for element spacers. Uses default $spacers map
@@ -112,7 +112,7 @@ $cursor-disabled:                         default !default;
 $page-header-border-width:                   $border-width !default;
 $page-header-elements-border-width:          $border-width !default;
 
-$page-header-padding-y:                      2rem !default;
+$page-header-padding-y:                      1rem !default;
 $page-header-padding-x:                      $grid-gutter-width !default;
 
 $page-header-light-bg:                       $white !default;
@@ -204,7 +204,7 @@ $navigation-padding-y:                      0.5rem !default;
 $navigation-item-padding-y:                 0.75rem !default;
 $navigation-item-padding-x:                 1.25rem !default;
 $navigation-item-spacer-y:                  1px !default;
-$navigation-item-font-weight:               $font-weight-semibold !default;
+$navigation-item-font-weight:               $font-weight-normal !default;
 $navigation-item-disabled-opacity:          0.5 !default;
 
 $navigation-sub-padding-y:                  0.625rem !default;
