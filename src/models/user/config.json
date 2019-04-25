@@ -1,0 +1,25 @@
+{
+  "name": "User",
+  "attributes": {
+    "id": {
+      "type": "number"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "posts": {
+      "via": "Post",
+      "multiple": true
+    }
+  },
+  "policies": {}
+}

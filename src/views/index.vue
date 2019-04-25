@@ -12,9 +12,9 @@ export default {
 
   mounted() {
     // if (this.status === 'LOGGED_OUT') {
-    //   this.$router.push('/login')
+    //   this.$router.pushItem('/login')
     // } else {
-    //   this.$router.push('/')
+    //   this.$router.pushItem('/')
     // }
   }
 }

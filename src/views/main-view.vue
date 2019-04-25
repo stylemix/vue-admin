@@ -1,15 +1,61 @@
 <template>
-  <layout></layout>
+  <layout-main>
+    <widget-form
+      v-if="$route.params.action === 'create'"
+      :model="findModel('User')"
+    ></widget-form>
+    <widget-table
+      v-else-if="!$route.params.action || $route.params.action === 'index'"
+      :model="findModel('User')"
+    >
+      <template slot="page-header">
+        <div class="page-header-content header-elements-md-inline">
+          <div class="page-title d-flex">
+            <h4>
+              <i class="icon-arrow-left52 mr-2"></i>
+              <span class="font-weight-semibold">Datatables</span> - Basic
+            </h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"
+              ><i class="icon-more"></i
+            ></a>
+          </div>
+          <div class="header-elements d-none">
+            <div class="d-flex justify-content-center">
+              <a href="#" class="btn btn-link btn-float text-default"
+                ><i class="icon-bars-alt text-primary"></i
+                ><span>Statistics</span></a
+              >
+              <a href="#" class="btn btn-link btn-float text-default"
+                ><i class="icon-calculator text-primary"></i>
+                <span>Invoices</span></a
+              >
+              <a href="#" class="btn btn-link btn-float text-default"
+                ><i class="icon-calendar5 text-primary"></i>
+                <span>Schedule</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </template>
+    </widget-table>
+  </layout-main>
 </template>
-
 <script>
-import Layout from '../components/layout/layout-main'
+import { mapGetters, mapActions } from 'vuex'
+
+import userModel from '../models/user'
+import LayoutMain from '../components/layout/layout-main'
 
 export default {
-  name: 'MainView',
+  name: 'BaseView',
+  components: { LayoutMain },
 
-  components: {
-    Layout
-  }
+  created() {
+    this.registerModel(userModel)
+  },
+
+  methods: mapActions('models', ['registerModel']),
+
+  computed: mapGetters('models', ['findModel'])
 }
 </script>
