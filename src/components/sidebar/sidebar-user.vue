@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar-user">
+  <div class="sidebar-user" v-if="user && user.firstname">
     <div class="card-body">
       <div class="media">
         <div class="mr-3">

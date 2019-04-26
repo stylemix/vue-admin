@@ -1,49 +1,51 @@
 <template>
-  <div>
-    <li v-if="item.children" :class="itemCss" @click="onItemClick(item)">
-      <router-link v-if="item.router" :to="item.router">
-        <i v-if="item.icon" :class="item.icon"></i>
-        <i v-else style="margin-left: 1rem"></i>
-        <span>{{ item.text }}</span>
-      </router-link>
-      <a v-else class="nav-link">
-        <i v-if="item.icon" :class="item.icon"></i>
-        <i v-else style="margin-left: 1rem"></i>
-        <span>{{ item.text }}</span>
-      </a>
+  <li v-if="item.children" :class="itemCss" @click="onItemClick(item)">
+    <router-link v-if="item.route" :to="item.route">
+      <i v-if="item.icon" :class="item.icon"></i>
+      <i v-else style="margin-left: 1rem"></i>
+      <span>{{ item.text }}</span>
+    </router-link>
+    <a v-else class="nav-link">
+      <i v-if="item.icon" :class="item.icon"></i>
+      <i v-else style="margin-left: 1rem"></i>
+      <span>{{ item.text }}</span>
+    </a>
 
-      <ul class="nav nav-group-sub" data-submenu-title="Starter kit">
-        <li
-          v-for="(child, index) in item.children"
-          :key="child.id || index"
-          @click.stop="onItemClick(child)"
-          class="nav-item"
-        >
-          <router-link v-if="child.router" :to="child.router" class="nav-link">
-            {{ child.text }}
-          </router-link>
-          <a v-else class="nav-link">{{ child.text }}</a>
-        </li>
-      </ul>
-    </li>
+    <ul
+      v-if="item.children && item.children.length > 0"
+      class="nav nav-group-sub"
+      :data-submenu-title="item.text"
+    >
+      <li
+        v-for="(child, index) in item.children"
+        :key="child.id || index"
+        @click.stop="onItemClick(child)"
+        class="nav-item"
+      >
+        <router-link v-if="child.route" :to="child.route" class="nav-link">
+          {{ child.text }}
+        </router-link>
+        <a v-else class="nav-link">{{ child.text }}</a>
+      </li>
+    </ul>
+  </li>
 
-    <li v-else-if="item.header" class="nav-item-header">
-      <div class="text-uppercase font-size-xs line-height-xs">
-        {{ item.text }}
-      </div>
-    </li>
+  <li v-else-if="item.header" class="nav-item-header">
+    <div class="text-uppercase font-size-xs line-height-xs">
+      {{ item.text }}
+    </div>
+  </li>
 
-    <li v-else class="nav-item" @click="onItemClick(item)">
-      <router-link v-if="item.router" :to="item.router" class="nav-link">
-        <i :class="item.icon"></i>
-        <span>{{ item.text }}</span>
-      </router-link>
-      <a v-else class="nav-link">
-        <i :class="item.icon"></i>
-        <span>{{ item.text }}</span>
-      </a>
-    </li>
-  </div>
+  <li v-else class="nav-item" @click="onItemClick(item)">
+    <router-link v-if="item.route" :to="item.route" class="nav-link">
+      <i :class="item.icon"></i>
+      <span>{{ item.text }}</span>
+    </router-link>
+    <a v-else class="nav-link">
+      <i :class="item.icon"></i>
+      <span>{{ item.text }}</span>
+    </a>
+  </li>
 </template>
 
 <script>

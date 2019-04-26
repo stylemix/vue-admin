@@ -10,5 +10,9 @@ export default {
   fullname({ user }) {
     if (user) return `${user.firstname} ${user.lastname}`
     else return 'Not authenticated'
+  },
+
+  actions({ actions }) {
+    return actions
   }
 }

@@ -3,7 +3,7 @@ export default {
     commit('setUser', user)
   },
 
-  setStatus({ commit }, status) {
-    commit('setStatus', status)
+  setActions({ commit }, actions) {
+    commit('setActions', actions)
   }
 }

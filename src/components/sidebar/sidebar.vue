@@ -15,9 +15,7 @@
 
     <!-- sidebar content -->
     <div class="sidebar-content">
-      <slot name="header">
-        <sidebar-user></sidebar-user>
-      </slot>
+      <slot name="header"></slot>
 
       <sidebar-menu
         :menu="menu"
@@ -30,10 +28,10 @@
 
 <script>
 import SidebarMenu from './sidebar-menu'
-import SidebarUser from './sidebar-user'
+
 export default {
   name: 'Sidebar',
-  components: { SidebarUser, SidebarMenu },
+  components: { SidebarMenu },
   props: {
     menu: {
       type: Array,

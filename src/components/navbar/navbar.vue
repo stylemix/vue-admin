@@ -2,7 +2,7 @@
   <div class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand">
       <a href="#" class="d-inline-block">
-        <img src="../../assets/images/logo_light.png" alt="logo" />
+        <img :src="logo" alt="logo" />
       </a>
     </div>
 
@@ -37,40 +37,23 @@
       </ul>
       <slot name="extra-nav" />
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a href="#" class="navbar-nav-link">
-            Replace with your own actions
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="navbar-nav-link">
-            Save
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="navbar-nav-link">
-            Delete
-          </a>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a href="#" class="navbar-nav-link">
-            <i class="icon-bell2"></i>
-            <span class="d-md-none ml-2">Notifications</span>
-            <span
-              class="badge badge-pill bg-warning border-white ml-auto ml-md-0"
-              >9</span
-            >
-          </a>
-        </li>
+        <navbar-user></navbar-user>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import NavbarUser from './navbar-user'
 export default {
   name: 'Navbar',
+  components: { NavbarUser },
+  props: {
+    logo: {
+      type: String,
+      default: null
+    }
+  },
 
   methods: {
     onHamburgerClick() {

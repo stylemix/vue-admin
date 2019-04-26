@@ -1,6 +1,8 @@
 <template>
   <div>
-    <navbar></navbar>
+    <slot name="navbar">
+      <navbar :logo="logo"></navbar>
+    </slot>
 
     <div class="page-content">
       <sidebar :menu="menu" @on:item:click="onMenuItemClick"></sidebar>
@@ -27,7 +29,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('sidebar', ['menu'])
+    ...mapGetters('sidebar', ['menu']),
+    ...mapGetters('preferences', ['logo'])
   },
 
   methods: {

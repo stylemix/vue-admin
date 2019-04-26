@@ -3,7 +3,7 @@ export default {
     state.user = user
   },
 
-  setStatus(state, status) {
-    state.status = status
+  setActions(state, actions) {
+    state.actions = actions
   }
 }
