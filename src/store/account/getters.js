@@ -1,10 +1,10 @@
 export default {
-  user(state) {
-    return state.user
+  user({ user }) {
+    return user
   },
 
-  status(state) {
-    return state.status
+  status({ status }) {
+    return status
   },
 
   fullname({ user }) {
@@ -14,5 +14,5 @@ export default {
 
   actions({ actions }) {
     return actions
-  }
+  },
 }

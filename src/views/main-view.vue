@@ -56,6 +56,6 @@ export default {
 
   methods: mapActions('models', ['registerModel']),
 
-  computed: mapGetters('models', ['findModel'])
+  computed: mapGetters('admin-models', ['findModel'])
 }
 </script>

@@ -1,6 +1,7 @@
+<!--suppress ALL -->
 <template>
   <!-- Login form -->
-  <form @submit.prevent class="login-form">
+  <form @submit.prevent="onSubmit" class="login-form">
     <div class="card mb-0">
       <div class="card-body">
         <div class="text-center mb-3">
@@ -12,14 +13,24 @@
         </div>
 
         <div class="form-group form-group-feedback form-group-feedback-left">
-          <input type="text" class="form-control" placeholder="Username" />
+          <input
+            v-model="form.email"
+            type="text"
+            class="form-control"
+            placeholder="Email"
+          />
           <div class="form-control-feedback">
             <i class="icon-user text-muted"></i>
           </div>
         </div>
 
         <div class="form-group form-group-feedback form-group-feedback-left">
-          <input type="password" class="form-control" placeholder="Password" />
+          <input
+            v-model="form.password"
+            type="password"
+            class="form-control"
+            placeholder="Password"
+          />
           <div class="form-control-feedback">
             <i class="icon-lock2 text-muted"></i>
           </div>
@@ -32,7 +43,12 @@
         </div>
 
         <div class="text-center">
-          <a href="#">Forgot password?</a>
+          Have not account yet?
+          <router-link to="/register">Sign Up</router-link>
+        </div>
+        <hr />
+        <div class="text-center">
+          <router-link to="/reset-password">Forgot password?</router-link>
         </div>
       </div>
     </div>
@@ -41,6 +57,8 @@
 </template>
 
 <script>
+import Config from '../../config'
+
 export default {
   name: 'SignIn',
 
@@ -49,6 +67,15 @@ export default {
       form: {
         email: null,
         password: null
+      }
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      const authHandler = Config.authHandler
+      if (authHandler && authHandler.onLogin) {
+        authHandler.onLogin(this.form, this)
       }
     }
   }

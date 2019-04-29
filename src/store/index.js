@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
 import sidebar from './sidebar'
-import profile from './profile'
+import account from './account'
 import models from './models'
 import preferences from './preferences'
 
@@ -13,10 +13,10 @@ const plugins = []
 if (process.env.NODE_ENV !== 'production') plugins.push(createLogger())
 
 const modules = {
-  sidebar,
-  models,
-  preferences,
-  profile
+  'admin-sidebar': sidebar,
+  'admin-models': models,
+  'admin-preferences': preferences,
+  'admin-account': account,
 }
 
 export default new Vuex.Store({

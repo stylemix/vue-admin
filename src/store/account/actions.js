@@ -5,5 +5,5 @@ export default {
 
   setActions({ commit }, actions) {
     commit('setActions', actions)
-  }
+  },
 }

@@ -2,7 +2,7 @@ import store from '../../store'
 
 export default {
   setMenu(menu) {
-    return store.dispatch('sidebar/setMenu', menu)
+    return store.dispatch('admin-sidebar/setMenu', menu)
   },
 
   pushItem(item) {
@@ -10,6 +10,6 @@ export default {
   },
 
   expandItem(item) {
-    return store.dispatch('expandItem', item)
+    return store.dispatch('admin-sidebar/expandItem', item)
   }
 }

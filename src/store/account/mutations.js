@@ -5,5 +5,5 @@ export default {
 
   setActions(state, actions) {
     state.actions = actions
-  }
+  },
 }

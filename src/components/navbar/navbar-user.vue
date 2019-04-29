@@ -1,5 +1,7 @@
 <template>
-  <li class="nav-item dropdown dropdown-user">
+  <li
+    v-if="user"
+    class="nav-item dropdown dropdown-user">
     <a
       @click="() => (show = !show)"
       @focusout="onFocusOut"
@@ -13,7 +15,7 @@
         class="rounded-circle"
         alt=""
       />
-      <span>{{ fullname }}</span>
+      <span>{{ user.name }}</span>
     </a>
 
     <div class="dropdown-menu dropdown-menu-right" :class="{ show: show }">
@@ -70,6 +72,6 @@ export default {
     }
   },
 
-  computed: mapGetters('profile', ['user', 'fullname', 'actions'])
+  computed: mapGetters('admin-account', ['user', 'actions'])
 }
 </script>

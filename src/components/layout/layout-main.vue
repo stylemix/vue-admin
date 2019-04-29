@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="root-container-stm">
     <slot name="navbar">
       <navbar :logo="logo"></navbar>
     </slot>
@@ -25,20 +25,28 @@ export default {
 
   components: {
     Sidebar,
-    Navbar
+    Navbar,
   },
 
   computed: {
-    ...mapGetters('sidebar', ['menu']),
-    ...mapGetters('preferences', ['logo'])
+    ...mapGetters('admin-sidebar', ['menu']),
+    ...mapGetters('admin-preferences', ['logo']),
   },
 
   methods: {
-    ...mapActions('sidebar', ['expandItem']),
+    ...mapActions('admin-sidebar', ['expandItem']),
     onMenuItemClick(item) {
       if (item.children && item.children.length) this.expandItem(item)
       else if (item.onClick) item.onClick(item)
-    }
-  }
+    },
+  },
 }
 </script>
+
+<style>
+.root-container-stm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+</style>
