@@ -1,7 +1,5 @@
 <template>
-  <li
-    v-if="user"
-    class="nav-item dropdown dropdown-user">
+  <li v-if="user" class="nav-item dropdown dropdown-user">
     <a
       @click="() => (show = !show)"
       @focusout="onFocusOut"
@@ -11,7 +9,7 @@
       aria-expanded="false"
     >
       <img
-        :src="user && user.avatar ? user.avatar : placeholder"
+        :src="user && user.avatar ? user.avatar : ''"
         class="rounded-circle"
         alt=""
       />
@@ -40,20 +38,16 @@
           ><i v-if="action.icon" :class="action.icon"></i>{{ action.text }}</a
         >
       </template>
-      <router-link
-        v-if="!actions || actions.length === 0"
-        to="/logout"
-        class="dropdown-item"
-      >
+      <a @click="logout" class="dropdown-item">
         <i class="icon-switch2"></i>Logout
-      </router-link>
+      </a>
     </div>
   </li>
 </template>
 
 <script>
-import placeholderImg from '../../assets/images/placeholders/placeholder.jpg'
 import { mapGetters } from 'vuex'
+import Config from '../../config'
 
 export default {
   name: 'NavbarUser',
@@ -61,11 +55,15 @@ export default {
   data() {
     return {
       show: false,
-      placeholder: placeholderImg,
     }
   },
 
   methods: {
+    logout() {
+      if (Config.authHandler && Config.authHandler.onLogout) {
+        Config.authHandler.onLogout()
+      }
+    },
     onFocusOut() {
       // handle action click before focus out!!!
       setTimeout(() => (this.show = !this.show), 500)

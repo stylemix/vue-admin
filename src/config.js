@@ -1,6 +1,6 @@
 const Config = {
   /**
-   * Main callbacks for auth forms: login, register, forgot
+   * Main callbacks for auth forms: login, register, forgot, logout
    */
   authHandler: null,
 
