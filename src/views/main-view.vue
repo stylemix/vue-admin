@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      model: null
+      model: null,
     }
   },
 
@@ -64,13 +64,13 @@ export default {
       throw new Error(
         `Can't find binding model for route /models/${route}
         Did you register model with name ${capitalizeFirst(
-          pluralize.singular(route)
-        )}?`
+          pluralize.singular(route),
+        )}?`,
       )
     }
     this.model = model
   },
 
-  computed: mapGetters('admin-models', ['findModel'])
+  computed: mapGetters('admin-models', ['findModel']),
 }
 </script>

@@ -66,8 +66,8 @@ export default {
     return {
       form: {
         email: null,
-        password: null
-      }
+        password: null,
+      },
     }
   },
 
@@ -77,7 +77,7 @@ export default {
       if (authHandler && authHandler.onLogin) {
         authHandler.onLogin(this.form, this)
       }
-    }
-  }
+    },
+  },
 }
 </script>

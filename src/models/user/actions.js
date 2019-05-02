@@ -9,8 +9,8 @@ export default {
         .get(url, {
           params: {
             _limit: context.limit,
-            _page: context.page
-          }
+            _page: context.page,
+          },
         })
         .then(response => {
           resolve(response.data)
@@ -29,5 +29,5 @@ export default {
 
   async delete(context) {
     return context
-  }
+  },
 }

@@ -6,10 +6,10 @@ export default {
   },
 
   pushItem(item) {
-    return store.dispatch('sidebar/pushItem', item)
+    return store.dispatch('admin-sidebar/pushItem', item)
   },
 
   expandItem(item) {
     return store.dispatch('admin-sidebar/expandItem', item)
-  }
+  },
 }

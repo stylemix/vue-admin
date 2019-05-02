@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'WidgetRelation'
+  name: 'WidgetRelation',
 }
 </script>

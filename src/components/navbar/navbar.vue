@@ -51,8 +51,8 @@ export default {
   props: {
     logo: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   methods: {
@@ -61,7 +61,7 @@ export default {
       const found = classList.contains('sidebar-xs')
       if (found) classList.remove('sidebar-xs')
       else classList.add('sidebar-xs')
-    }
-  }
+    },
+  },
 }
 </script>

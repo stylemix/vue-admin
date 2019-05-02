@@ -9,7 +9,7 @@ export default {
 
   expandItem(state, forExpand) {
     state.menu = state.menu.map(item =>
-      item === forExpand ? { ...item, isOpen: !item.isOpen } : item
+      item === forExpand ? { ...item, isOpen: !item.isOpen } : item,
     )
-  }
+  },
 }

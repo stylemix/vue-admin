@@ -13,6 +13,6 @@ import SignUp from '../components/auth/auth-sign-up'
 
 export default {
   name: 'RegisterView',
-  components: { SignUp }
+  components: { SignUp },
 }
 </script>

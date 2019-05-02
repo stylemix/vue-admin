@@ -57,8 +57,8 @@ export default {
       type: Object,
       default() {
         return {}
-      }
-    }
+      },
+    },
   },
 
   computed: {
@@ -66,7 +66,7 @@ export default {
       if (this.item.isOpen)
         return 'nav-item nav-item-submenu nav-item-expanded nav-item-open'
       else return 'nav-item nav-item-submenu'
-    }
+    },
   },
 
   methods: {
@@ -74,7 +74,7 @@ export default {
       if (item.children && item.children.length) {
         this.$emit('on:click', item)
       } else if (item.onClick) item.onClick(item)
-    }
-  }
+    },
+  },
 }
 </script>

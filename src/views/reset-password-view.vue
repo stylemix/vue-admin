@@ -12,6 +12,6 @@
 import AuthForgot from '../components/auth/auth-forgot'
 export default {
   name: 'ResetPasswordView',
-  components: { AuthForgot }
+  components: { AuthForgot },
 }
 </script>

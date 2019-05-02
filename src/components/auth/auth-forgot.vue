@@ -44,7 +44,7 @@ export default {
 
   data() {
     return {
-      form: { email: null }
+      form: { email: null },
     }
   },
 
@@ -53,7 +53,7 @@ export default {
       const authHandler = Config.authHandler
       if (authHandler && authHandler.onResetPassword)
         authHandler.onResetPassword(this.form, this)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -50,24 +50,24 @@ export default {
       type: Array,
       default() {
         return []
-      }
+      },
     },
 
     header: {
       type: String,
-      default: ''
+      default: '',
     },
 
     showBackArrow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   methods: {
     onActionClick(action) {
       if (action.onClick) action.onClick.call(this, action, this)
-    }
-  }
+    },
+  },
 }
 </script>

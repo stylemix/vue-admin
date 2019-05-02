@@ -4,5 +4,5 @@ export default {
   number: 'widget-input',
   text: 'widget-textarea',
   geolocation: 'widget-geolocation',
-  datetime: 'widget-datetime'
+  datetime: 'widget-datetime',
 }

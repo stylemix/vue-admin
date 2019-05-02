@@ -12,6 +12,6 @@
 import SignIn from '../components/auth/auth-sign-in'
 export default {
   name: 'LoginView',
-  components: { SignIn }
+  components: { SignIn },
 }
 </script>

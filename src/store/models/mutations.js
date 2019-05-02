@@ -17,5 +17,5 @@ export default {
     }
 
     state.map.set(name, model)
-  }
+  },
 }

@@ -2,35 +2,35 @@ export default {
   user: {
     firstname: 'John',
     lastname: 'Doe',
-    email: 'john@doe.com'
+    email: 'john@doe.com',
   },
   actions: [
     {
       text: 'My profile',
-      icon: 'icon-user-plus'
+      icon: 'icon-user-plus',
     },
     {
       text: 'My balance',
       icon: 'icon-coins',
       onClick(item) {
         console.log(item)
-      }
+      },
     },
     {
       text: 'Messages',
-      icon: 'icon-comment-discussion'
+      icon: 'icon-comment-discussion',
     },
     {
-      divider: true
+      divider: true,
     },
     {
       text: 'Account settings',
-      icon: 'icon-cog5'
+      icon: 'icon-cog5',
     },
     {
       text: 'Logout',
-      icon: 'icon-switch2'
-    }
+      icon: 'icon-switch2',
+    },
   ],
   authHandler: {
     onLogin(form) {
@@ -43,6 +43,6 @@ export default {
 
     onResetPassword(form) {
       console.log(form)
-    }
-  }
+    },
+  },
 }

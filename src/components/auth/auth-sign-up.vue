@@ -85,8 +85,8 @@ export default {
       form: {
         email: null,
         password: null,
-        agreement: false
-      }
+        agreement: false,
+      },
     }
   },
 
@@ -95,7 +95,7 @@ export default {
       const authHandler = Config.authHandler
       if (authHandler && authHandler.onRegister)
         authHandler.onRegister(this.form, this)
-    }
+    },
   },
 }
 </script>

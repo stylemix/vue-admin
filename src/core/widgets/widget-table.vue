@@ -50,13 +50,13 @@ export default {
       type: Object,
       default() {
         return null
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
-      tableData: []
+      tableData: [],
     }
   },
 
@@ -64,7 +64,7 @@ export default {
     this.model.actions
       .index({
         page: 1,
-        limit: 100
+        limit: 100,
       })
       .then(users => (this.tableData = users))
       .catch(err => console.error(err))
@@ -92,7 +92,7 @@ export default {
 
         return mappedRow
       })
-    }
-  }
+    },
+  },
 }
 </script>

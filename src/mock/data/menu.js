@@ -1,31 +1,31 @@
 export default [
   {
     text: 'Main',
-    header: true
+    header: true,
   },
   {
     text: 'Dashboard',
-    icon: 'icon-home2'
+    icon: 'icon-home2',
   },
   {
     text: 'Starter kit',
     isOpen: false,
     children: [
       {
-        text: 'Horizontal navigation'
+        text: 'Horizontal navigation',
       },
       {
         text: 'No sidebar',
         onClick(item) {
           console.warn(`${item.text} clicked`)
-        }
+        },
       },
       {
-        text: '1 sidebar'
+        text: '1 sidebar',
       },
       {
-        text: '2 sidebars'
-      }
-    ]
-  }
+        text: '2 sidebars',
+      },
+    ],
+  },
 ]

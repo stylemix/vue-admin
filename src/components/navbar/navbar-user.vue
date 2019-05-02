@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       show: false,
-      placeholder: placeholderImg
+      placeholder: placeholderImg,
     }
   },
 
@@ -69,9 +69,9 @@ export default {
     onFocusOut() {
       // handle action click before focus out!!!
       setTimeout(() => (this.show = !this.show), 500)
-    }
+    },
   },
 
-  computed: mapGetters('admin-account', ['user', 'actions'])
+  computed: mapGetters('admin-account', ['user', 'actions']),
 }
 </script>

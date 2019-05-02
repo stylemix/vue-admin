@@ -9,5 +9,5 @@ export default {
 
   expandItem({ commit }, itemForExpand) {
     commit('expandItem', itemForExpand)
-  }
+  },
 }

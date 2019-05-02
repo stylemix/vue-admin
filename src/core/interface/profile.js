@@ -7,5 +7,5 @@ export default {
 
   setUser(user) {
     store.dispatch('admin-account/setUser', user)
-  }
+  },
 }

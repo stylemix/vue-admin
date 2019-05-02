@@ -1,3 +1,3 @@
 export default {
-  map: new Map()
+  map: new Map(),
 }

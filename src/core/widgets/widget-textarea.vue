@@ -13,14 +13,14 @@ export default {
   props: {
     label: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
-      value: null
+      value: null,
     }
-  }
+  },
 }
 </script>

@@ -22,20 +22,20 @@ export default {
   name: 'WidgetGeolocation',
 
   components: {
-    VueGoogleAutocomplete
+    VueGoogleAutocomplete,
   },
 
   props: {
     label: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
       googleLoaded: false,
-      value: null
+      value: null,
     }
   },
 
@@ -50,7 +50,7 @@ export default {
       const mapKey = process.env.VUE_APP_GOOGLE_MAP_KEY
       if (!mapKey) {
         console.warn(
-          'Invalid Google map key. Are you added VUE_APP_GOOGLE_MAP_KEY key in .env file?'
+          'Invalid Google map key. Are you added VUE_APP_GOOGLE_MAP_KEY key in .env file?',
         )
         return
       }
@@ -73,7 +73,7 @@ export default {
 
     onPlaceChanged({ latitude: lat, longitude: long }) {
       this.value = { lat, long }
-    }
-  }
+    },
+  },
 }
 </script>

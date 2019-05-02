@@ -43,28 +43,28 @@ export default {
   name: 'WidgetDatetime',
 
   components: {
-    VueCtkDatetimePicker
+    VueCtkDatetimePicker,
   },
 
   props: {
     label: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
       value: null,
-      showPicker: false
+      showPicker: false,
     }
   },
 
   methods: {
     onInput() {
       this.showPicker = false
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -13,9 +13,9 @@ export default {
         'admin-sidebar/pushItem',
         {
           header: true,
-          text: 'Models'
+          text: 'Models',
         },
-        { root: true }
+        { root: true },
       )
     // #endregion
 
@@ -31,16 +31,16 @@ export default {
         children: [
           {
             text: 'Show all',
-            route: `/models/${router.toLowerCase()}`
+            route: `/models/${router.toLowerCase()}`,
           },
           {
             text: 'Create',
-            route: `/models/${router.toLowerCase()}/create`
-          }
-        ]
+            route: `/models/${router.toLowerCase()}/create`,
+          },
+        ],
       },
-      { root: true }
+      { root: true },
     )
     // #endregion
-  }
+  },
 }

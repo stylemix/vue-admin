@@ -27,8 +27,8 @@ export default {
       type: Object,
       default() {
         return null
-      }
-    }
+      },
+    },
   },
 
   computed: {
@@ -52,7 +52,7 @@ export default {
             if (widget)
               result.push({
                 widget,
-                props
+                props,
               })
             else console.error(`No widget binding found for type "${type}"`)
           } else {
@@ -63,7 +63,7 @@ export default {
       }
 
       return result
-    }
+    },
   },
 
   methods: {
@@ -71,7 +71,7 @@ export default {
       const value = 'some data'
       console.log(value)
       this.$emit('submit', value)
-    }
-  }
+    },
+  },
 }
 </script>

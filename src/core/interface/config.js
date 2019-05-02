@@ -1,6 +1,5 @@
 import store from '../../store'
-import AxiosConfig from '../../plugins/axios/config';
-import Config from '../../config';
+import Config from '../../config'
 
 export default {
   setLogo(url) {

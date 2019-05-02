@@ -8,7 +8,6 @@ const Config = {
    * Default (home) route
    */
   defaultRoute: null,
-
 }
 
 export default Config

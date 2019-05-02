@@ -23,6 +23,6 @@
 
 <script>
 export default {
-  name: 'WidgetTableHeader'
+  name: 'WidgetTableHeader',
 }
 </script>

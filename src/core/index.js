@@ -11,7 +11,7 @@ const requireComponent = require.context(
   // don't look in subdirectories
   false,
   // only include "widget-" prefixed .vue files
-  /widget-[\w-]+\.vue$/
+  /widget-[\w-]+\.vue$/,
 )
 
 // for each matching file name...
