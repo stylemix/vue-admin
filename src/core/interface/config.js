@@ -17,6 +17,10 @@ export default {
     require('../../plugins/axios')
   },
 
+  useAlerts() {
+    require('../../plugins/alerts')
+  },
+
   useAuth(config) {
     Object.assign(AuthConfig, config)
     require('../../modules/auth')

@@ -1,0 +1,37 @@
+import Vue from 'vue'
+import swal from 'sweetalert2'
+import defaults from 'lodash-es/defaults'
+
+const types = ['success', 'error', 'warning', 'info', 'question']
+const $alert = {}
+const $toast = {}
+const toastOptions = {
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+}
+
+types.forEach(type => {
+  $alert[type] = (title, text, options) =>
+    swal(defaults({ type, title, text }, options))
+
+  $toast[type] = (title, text, options) =>
+    swal(defaults({ type, title, text }, toastOptions, options))
+})
+
+// Bind Swal to Vue.
+Vue.$alert = $alert
+Vue.$toast = $toast
+
+Object.defineProperty(Vue.prototype, '$alert', {
+  get() {
+    return Vue.$alert
+  },
+})
+
+Object.defineProperty(Vue.prototype, '$toast', {
+  get() {
+    return Vue.$toast
+  },
+})
