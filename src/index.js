@@ -25,3 +25,4 @@ export const AdminAccount = account
 export { default as AdminApi } from './plugins/api'
 export { default as AdminSearchForm } from './components/AdminSearchForm'
 export { default as AdminTable } from './components/AdminTable'
+export { default as ResourceFormMixin } from './mixins/ResourceFormMixin'
