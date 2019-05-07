@@ -8,6 +8,7 @@ import account from './core/interface/account'
 import store from './store'
 import router from './router'
 import './plugins/ui-blocker'
+import './plugins/bootstrap'
 
 // setup sweet alert 2
 import './plugins/sweet-alert2'
