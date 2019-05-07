@@ -13,9 +13,9 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "pluralize": "^7.0.0",
+    "stylemix-base": "git+https://github.com/stylemix/vue-base.git#dev",
     "vue": "^2.6.10",
-    "vue-ctk-date-time-picker": "^2.1.1",
-    "vue-google-autocomplete": "^1.1.0",
+    "vue-loading-overlay": "^3.1.1",
     "vue-router": "^3.0.3",
     "vue-sweetalert2": "^1.6.4",
     "vuex": "^3.0.1"
