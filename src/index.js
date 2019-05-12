@@ -9,6 +9,7 @@ import store from './store'
 import router from './router'
 import './plugins/ui-blocker'
 import './plugins/bootstrap'
+import './plugins/moment'
 
 // setup sweet alert 2
 import './plugins/sweet-alert2'
