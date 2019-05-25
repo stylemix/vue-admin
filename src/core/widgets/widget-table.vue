@@ -23,7 +23,12 @@
                 class="odd"
               >
                 <td v-for="(value, key) in row" :key="key">
-                  {{ value }}
+                  <template v-if="typeof $scopedSlots[key] !== 'undefined'">
+                    <slot :name="key" :row="row"></slot>
+                  </template>
+                  <template v-else>
+                    {{ value }}
+                  </template>
                 </td>
               </tr>
             </tbody>
@@ -71,7 +76,7 @@ export default {
       if (config && config.attributes)
         return Object.keys(config.attributes)
           .filter(key => !config.attributes[key].via)
-          .map(key => capitalizeFirst(key))
+          .map(key => config.attributes[key].label || capitalizeFirst(key))
       return []
     },
 

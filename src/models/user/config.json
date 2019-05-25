@@ -11,10 +11,13 @@
       "type": "string"
     },
     "website": {
-      "type": "string"
+      "type": "geolocation"
     },
     "phone": {
       "type": "string"
+    },
+    "date": {
+      "type": "datetime"
     },
     "posts": {
       "via": "Post",

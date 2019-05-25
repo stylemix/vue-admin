@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent>
+  <form @submit.prevent="onSubmit">
     <div class="content">
       <div class="row">
         <template v-for="(attribute, index) in attributes">
@@ -63,6 +63,14 @@ export default {
       }
 
       return result
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      const value = 'some data'
+      console.log(value)
+      this.$emit('submit', value)
     }
   }
 }

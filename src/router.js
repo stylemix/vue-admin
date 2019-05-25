@@ -1,19 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MainView from './views/main-view'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'main',
-      component: MainView
-    },
-    {
-      path: '/:module/:action?',
-      name: 'module',
+      path: '/models/:model/:action?',
+      name: 'model',
       component: () => import('./views/main-view')
     },
     // finally the default route, when none of the above matches

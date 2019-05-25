@@ -9,6 +9,11 @@ import './core'
 // uncomment this line in production mode
 import './mock/data'
 
+// register models
+import './models'
+
+import './assets/scss/main.scss'
+
 Vue.config.productionTip = false
 
 new Vue({

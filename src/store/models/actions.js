@@ -6,11 +6,11 @@ export default {
 
     // #region
     // add "MODELS" header if doesn't exists
-    const menu = rootState.sidebar.menu
+    const menu = rootState['admin-sidebar'].menu
     const found = menu.some(m => m.text === 'models')
     if (!found)
       dispatch(
-        'sidebar/pushItem',
+        'admin-sidebar/pushItem',
         {
           header: true,
           text: 'Models'
@@ -24,18 +24,18 @@ export default {
     const name = model.config.name + 's'
     const router = model.config.router || name
     dispatch(
-      'sidebar/pushItem',
+      'admin-sidebar/pushItem',
       {
         icon: 'icon-user',
         text: capitalizeFirst(name),
         children: [
           {
             text: 'Show all',
-            router: `/${router.toLowerCase()}`
+            route: `/models/${router.toLowerCase()}`
           },
           {
             text: 'Create',
-            router: `/${router.toLowerCase()}/create`
+            route: `/models/${router.toLowerCase()}/create`
           }
         ]
       },

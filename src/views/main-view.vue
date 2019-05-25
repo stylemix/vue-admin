@@ -2,11 +2,11 @@
   <layout-main>
     <widget-form
       v-if="$route.params.action === 'create'"
-      :model="findModel('User')"
+      :model="model"
     ></widget-form>
     <widget-table
       v-else-if="!$route.params.action || $route.params.action === 'index'"
-      :model="findModel('User')"
+      :model="model"
     >
       <template slot="page-header">
         <div class="page-header-content header-elements-md-inline">
@@ -41,20 +41,35 @@
   </layout-main>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import pluralize from 'pluralize'
+import { mapGetters } from 'vuex'
 
-import userModel from '../models/user'
 import LayoutMain from '../components/layout/layout-main'
+import { capitalizeFirst } from '../core/utils'
 
 export default {
   name: 'BaseView',
   components: { LayoutMain },
 
-  created() {
-    this.registerModel(userModel)
+  data() {
+    return {
+      model: null
+    }
   },
 
-  methods: mapActions('models', ['registerModel']),
+  created() {
+    const route = this.$route.params.model
+    const model = this.findModel(route)
+    if (!model) {
+      throw new Error(
+        `Can't find binding model for route /models/${route}
+        Did you register model with name ${capitalizeFirst(
+          pluralize.singular(route)
+        )}?`
+      )
+    }
+    this.model = model
+  },
 
   computed: mapGetters('admin-models', ['findModel'])
 }
