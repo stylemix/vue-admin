@@ -2,7 +2,7 @@
   "name": "stylemix-vue-admin",
   "version": "0.1.0",
   "private": true,
-  "main": "",
+  "main": "src/index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
