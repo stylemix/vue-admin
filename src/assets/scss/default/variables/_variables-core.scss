@@ -276,7 +276,7 @@ $font-family-base:           $font-family-sans-serif;
 //$font-size-base:             0.8125rem; // Assumes the browser default, typically `16px`
 //$font-size-lg:               ($font-size-base + 0.0625rem);
 //$font-size-sm:               ($font-size-base - 0.0625rem);
-$font-size-xs:               ($font-size-base - (0.0625rem * 2)) !default;
+$font-size-xs:               ($font-size-base * 0.6875) !default;
 
 // Font weights
 $font-weight-thin:           100 !default;
