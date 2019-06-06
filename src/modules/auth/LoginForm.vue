@@ -66,6 +66,7 @@ export default {
             { token, expiresIn },
             expiresIn,
           ).then(() => {
+            AdminStore.dispatch('admin-auth/find')
             if (Config.defaultRoute) {
               AdminRouter.push(Config.defaultRoute)
             }

@@ -1,4 +1,6 @@
+import Vue from 'vue'
 import Axios from 'axios'
+import { mapState } from 'vuex'
 import AdminRouter from '../../router'
 import AdminStore from '../../store'
 import AuthStore from './store'
@@ -82,7 +84,21 @@ AdminRouter.beforeEach((to, from, next) => {
 })
 
 AdminStore.dispatch('admin-auth/check').then(result => {
-  if (!result) {
+  if (result) {
+    AdminStore.dispatch('admin-auth/find')
+  } else {
     AdminRouter.push({ name: 'login' })
   }
+})
+
+// Allow access some useful state data for all components
+Vue.mixin({
+  computed: {
+    ...mapState('admin-auth', {
+      $authenticated: 'authenticated',
+    }),
+    ...mapState('admin-account', {
+      $account: 'user',
+    }),
+  },
 })

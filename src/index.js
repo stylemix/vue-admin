@@ -24,6 +24,7 @@ export const AdminProfile = profile
 export const AdminStore = store
 export const AdminAccount = account
 export { default as AdminApi } from './plugins/api'
+export { default as AuthMixin } from './modules/auth/AuthMixin'
 export { default as AdminSearchForm } from './components/AdminSearchForm'
 export { default as AdminTable } from './components/AdminTable'
 export { default as ResourceFormMixin } from './mixins/ResourceFormMixin'

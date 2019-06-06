@@ -45,7 +45,7 @@ export const check = context => {
 
   if (context.state.authenticated) {
     initRefresh(context)
-    return context.dispatch('find')
+    return true
   }
 
   return false
