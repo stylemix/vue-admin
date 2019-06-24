@@ -8,10 +8,10 @@
               <div class="text-center mb-3">
                 <i
                   class="icon-spinner11 icon-2x text-warning border-warning border-3 rounded-round p-3 mb-3 mt-1"
-                ></i>
-                <h5 class="mb-0">Password recovery</h5>
+                />
+                <h5 class="mb-0">{{ strings.auth.forgot_header }}</h5>
                 <span class="d-block text-muted">
-                  We'll send you instructions in email
+                  {{ strings.auth.forgot_desc }}
                 </span>
               </div>
 
@@ -21,7 +21,9 @@
 
               <hr />
               <div class="text-center">
-                <router-link :to="loginRoute">Back to login</router-link>
+                <router-link :to="loginRoute">
+                  {{ strings.auth.forgot_login_text }}
+                </router-link>
               </div>
             </div>
           </div>
@@ -34,10 +36,16 @@
 <script>
 import AuthForgot from '../components/auth/auth-forgot'
 import AuthRoutesMixin from './AuthRoutesMixin'
+import strings from '../strings'
 
 export default {
   name: 'ResetPasswordView',
   components: { AuthForgot },
   mixins: [AuthRoutesMixin],
+  computed: {
+    strings() {
+      return strings
+    },
+  },
 }
 </script>

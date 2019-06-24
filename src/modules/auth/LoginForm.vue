@@ -9,7 +9,7 @@
       />
       <div class="form-group">
         <button type="submit" class="btn btn-primary btn-block">
-          Sign in
+          {{ strings.auth.sign_in }}
           <i class="icon-circle-right2 ml-2"></i>
         </button>
       </div>
@@ -20,11 +20,11 @@
 <script>
 import { FormMixin } from 'stylemix-base'
 import AdminStore from '../../store'
-import AuthConfig from './config'
 import Config from '../../config'
 import AuthApi from './AuthApi'
 import LoginView from '../../views/login-view'
 import AdminRouter from '../../router'
+import strings from '../../strings'
 
 export default {
   name: 'LoginForm',
@@ -41,14 +41,43 @@ export default {
     }
   },
 
-  created() {
-    if (AuthConfig.loginForm) {
-      this.setFields(AuthConfig.loginForm.fields)
-      this.model = AuthConfig.loginForm.model
-    }
+  computed: {
+    strings() {
+      return strings
+    },
+  },
+
+  mounted() {
+    this.loadForm()
   },
 
   methods: {
+    loadForm() {
+      this.model = {
+        email: null,
+        password: null,
+      }
+
+      this.setFields([
+        {
+          component: 'text-field',
+          attribute: 'email',
+          type: 'email',
+          get label() {
+            return strings.auth.email
+          },
+        },
+        {
+          component: 'text-field',
+          attribute: 'password',
+          type: 'password',
+          get label() {
+            return strings.auth.password
+          },
+        },
+      ])
+    },
+
     onSubmit() {
       this.errors.clear()
 

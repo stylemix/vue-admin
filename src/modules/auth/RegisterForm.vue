@@ -13,7 +13,7 @@
         type="submit"
         class="btn bg-teal-400 btn-block"
       >
-        Register
+        {{ strings.auth.sign_in }}
         <i class="icon-circle-right2 ml-2"></i>
       </button>
     </form>
@@ -23,11 +23,11 @@
 <script>
 import { FormMixin } from 'stylemix-base'
 import AdminStore from '../../store'
-import AuthConfig from './config'
 import AdminRouter from '../../router'
 import Config from '../../config'
 import AuthApi from './AuthApi'
 import RegisterView from '../../views/register-view'
+import strings from '../../strings'
 
 export default {
   name: 'RegisterForm',
@@ -44,14 +44,56 @@ export default {
     }
   },
 
-  created() {
-    if (AuthConfig.registerForm) {
-      this.setFields(AuthConfig.registerForm.fields)
-      this.model = AuthConfig.registerForm.model
-    }
+  computed: {
+    strings() {
+      return strings
+    },
+  },
+
+  mounted() {
+    this.loadForm()
   },
 
   methods: {
+    loadForm() {
+      this.model = {
+        first_name: null,
+        last_name: null,
+        email: null,
+        password: null,
+      }
+
+      this.setFields([
+        {
+          component: 'text-field',
+          attribute: 'first_name',
+          label: 'First name',
+        },
+        {
+          component: 'text-field',
+          attribute: 'last_name',
+          label: 'Last name',
+        },
+        {
+          component: 'text-field',
+          attribute: 'email',
+          type: 'email',
+          label: 'Email',
+        },
+        {
+          component: 'text-field',
+          attribute: 'password',
+          type: 'password',
+          label: 'Password',
+        },
+        {
+          component: 'checkbox-field',
+          attribute: 'agree',
+          label: 'I agree with terms of service',
+        },
+      ])
+    },
+
     onSubmit() {
       this.errors.clear()
 

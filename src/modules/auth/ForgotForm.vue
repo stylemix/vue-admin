@@ -8,7 +8,8 @@
         layout="vertical"
       />
       <button type="submit" class="btn btn-info btn-block">
-        <i class="icon-spinner11 mr-2"></i> Send instructions
+        <i class="icon-spinner11 mr-2"></i>
+        {{ strings.auth.forgot_submit }}
       </button>
     </form>
   </reset-password-view>
@@ -16,11 +17,11 @@
 
 <script>
 import { FormMixin } from 'stylemix-base'
-import AuthConfig from './config'
 import AuthApi from './AuthApi'
 import AdminRouter from '../../router'
 import ResetPasswordView from '../../views/forgot-password-view'
 import AuthRoutesMixin from '../../views/AuthRoutesMixin'
+import strings from '../../strings'
 
 export default {
   name: 'ResetForm',
@@ -37,14 +38,34 @@ export default {
     }
   },
 
-  created() {
-    if (AuthConfig.forgotForm) {
-      this.setFields(AuthConfig.forgotForm.fields)
-      this.model = AuthConfig.forgotForm.model
-    }
+  computed: {
+    strings() {
+      return strings
+    },
+  },
+
+  mounted() {
+    this.loadForm()
   },
 
   methods: {
+    loadForm() {
+      this.model = {
+        email: null,
+      }
+
+      this.setFields([
+        {
+          component: 'text-field',
+          attribute: 'email',
+          type: 'email',
+          get label() {
+            return strings.auth.email
+          },
+        },
+      ])
+    },
+
     onSubmit() {
       this.errors.clear()
 

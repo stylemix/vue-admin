@@ -6,7 +6,6 @@
  * auth module.
  */
 
-import { AdminStore as store } from '../../..'
 import * as types from './mutation-types'
 import AuthApi from '../AuthApi'
 import AccountApi from '../../account/AccountApi'

@@ -8,25 +8,31 @@
               <div class="text-center mb-3">
                 <i
                   class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"
-                ></i>
-                <h5 class="mb-0">Login to your account</h5>
-                <span class="d-block text-muted"
-                  >Enter your credentials below</span
-                >
+                />
+                <h5 class="mb-0">{{ strings.auth.login_header }}</h5>
+                <span class="d-block text-muted">
+                  {{ strings.auth.login_desc }}
+                </span>
               </div>
 
               <slot>
                 <sign-in />
               </slot>
 
-              <div class="text-center">
-                Have not account yet?
-                <router-link :to="registerRoute">Sign Up</router-link>
+              <div v-if="withRegistration" class="text-center">
+                {{ strings.auth.login_register_text }}
+                <router-link :to="registerRoute">
+                  {{ strings.auth.sign_up }}
+                </router-link>
               </div>
-              <hr />
-              <div class="text-center">
-                <router-link :to="forgotRoute">Forgot password?</router-link>
-              </div>
+              <template v-if="withForgot">
+                <hr />
+                <div class="text-center">
+                  <router-link :to="forgotRoute">
+                    {{ strings.auth.login_forgot_text }}
+                  </router-link>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -38,10 +44,23 @@
 <script>
 import SignIn from '../components/auth/auth-sign-in'
 import AuthRoutesMixin from './AuthRoutesMixin'
+import AuthConfig from '../modules/auth/config'
+import strings from '../strings'
 
 export default {
   name: 'LoginView',
   components: { SignIn },
   mixins: [AuthRoutesMixin],
+  computed: {
+    withRegistration() {
+      return AuthConfig.withRegistration
+    },
+    withForgot() {
+      return AuthConfig.withForgot
+    },
+    strings() {
+      return strings
+    },
+  },
 }
 </script>

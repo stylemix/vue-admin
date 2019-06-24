@@ -5,11 +5,13 @@ const AuthConfig = {
     register: 'register',
     forgot: 'forgot-password',
   },
-  registerForm: null,
   loginForm: null,
+  registerForm: null,
   forgotForm: null,
   onLogout: null,
-  textMenuLogout: 'Logout',
+  withRegistration: true,
+  withForgot: true,
+  withHttpInterceptor: true,
 }
 
 export default AuthConfig
