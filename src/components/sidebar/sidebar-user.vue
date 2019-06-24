@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar-user" v-if="user && user.firstname">
+  <div class="sidebar-user" v-if="account">
     <div class="card-body">
       <div class="media">
         <div class="mr-3">
           <a href="#"
             ><img
-              v-if="user.avatar"
-              :src="user.avatar"
+              v-if="account.avatar"
+              :src="account.avatar"
               width="38"
               height="38"
               class="rounded-circle"
@@ -14,10 +14,10 @@
           /></a>
         </div>
 
-        <div v-if="user" class="media-body">
-          <div class="media-title font-weight-semibold">{{ fullname }}</div>
+        <div v-if="account" class="media-body">
+          <div class="media-title font-weight-semibold">{{ account.name }}</div>
           <div class="font-size-xs opacity-50">
-            {{ user.profession || `Programmer, SEO manager` }}
+            {{ account.profession || `Programmer, SEO manager` }}
           </div>
         </div>
 
@@ -35,6 +35,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SidebarUser',
 
-  computed: mapGetters('admin-account', ['fullname', 'user']),
+  computed: mapGetters('admin-auth', ['account']),
 }
 </script>

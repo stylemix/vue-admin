@@ -9,6 +9,7 @@ import AuthConfig from './config'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import ForgotForm from './ForgotForm'
+import AdminConfig from '../../core/interface/config'
 
 AdminStore.registerModule('admin-auth', AuthStore)
 
@@ -39,13 +40,11 @@ AdminRouter.addRoutes([
   },
 ])
 
-Config.authHandler = {
-  onLogout() {
-    AdminStore.dispatch('admin-auth/logout').then(() => {
-      AdminStore.dispatch('admin-account/setUser', null)
-      AdminRouter.push({ name: AuthConfig.routes.login })
-    })
-  },
+AuthConfig.onLogout = () => {
+  AdminStore.dispatch('admin-auth/logout').then(() => {
+    AdminStore.commit('admin-auth/account', null)
+    AdminRouter.push({ name: AuthConfig.routes.login })
+  })
 }
 
 Axios.interceptors.response.use(
@@ -97,8 +96,21 @@ Vue.mixin({
     ...mapState('admin-auth', {
       $authenticated: 'authenticated',
     }),
-    ...mapState('admin-account', {
-      $account: 'user',
+    ...mapState('admin-auth', {
+      $account: 'account',
     }),
   },
 })
+
+AdminConfig.pushAccountMenuItems([
+  {
+    order: 100,
+    onClick() {
+      if (AuthConfig.onLogout) {
+        AuthConfig.onLogout()
+      }
+    },
+    icon: 'icon-switch2',
+    text: AuthConfig.textMenuLogout,
+  },
+])

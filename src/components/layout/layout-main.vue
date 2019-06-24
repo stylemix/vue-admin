@@ -15,10 +15,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Navbar from '../navbar/navbar'
 import Sidebar from '../sidebar/sidebar'
-
-import { mapGetters, mapActions } from 'vuex'
+import Config from '../../config'
 
 export default {
   name: 'LayoutMain',
@@ -29,8 +29,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin-sidebar', ['menu']),
     ...mapGetters('admin-preferences', ['logo']),
+    menu() {
+      return Config.sidebarMenu
+    },
   },
 
   methods: {

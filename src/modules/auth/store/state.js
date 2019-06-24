@@ -8,4 +8,5 @@
 export default {
   authenticated: false,
   expires: 0,
+  account: null,
 }

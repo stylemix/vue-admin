@@ -44,4 +44,8 @@ export default {
       Vue.$http.defaults.headers.common.Authorization = ''
     }
   },
+
+  account(state, account) {
+    state.account = account
+  },
 }

@@ -8,6 +8,8 @@ const AuthConfig = {
   registerForm: null,
   loginForm: null,
   forgotForm: null,
+  onLogout: null,
+  textMenuLogout: 'Logout',
 }
 
 export default AuthConfig

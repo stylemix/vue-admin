@@ -1,49 +1,45 @@
 <template>
-  <li v-if="item.children" :class="itemCss" @click="onItemClick(item)">
-    <router-link v-if="item.route" :to="item.route">
-      <i v-if="item.icon" :class="item.icon"></i>
+  <li
+    v-if="menuItem.children"
+    :class="menuItem.isOpen ? 'nav-item-expanded nav-item-open' : ''"
+    class="nav-item nav-item-submenu"
+  >
+    <a href @click.prevent="expand" class="nav-link">
+      <i
+        v-if="menuItem.icon"
+        :class="[menuItem.icon, menuItem.isOpen ? '' : 'text-muted']"
+      />
       <i v-else style="margin-left: 1rem"></i>
-      <span>{{ item.text }}</span>
-    </router-link>
-    <a v-else class="nav-link">
-      <i v-if="item.icon" :class="item.icon"></i>
-      <i v-else style="margin-left: 1rem"></i>
-      <span>{{ item.text }}</span>
+      <span>{{ itemText }}</span>
     </a>
 
     <ul
-      v-if="item.children && item.children.length > 0"
+      v-if="menuItem.children && menuItem.children.length > 0"
       class="nav nav-group-sub"
-      :data-submenu-title="item.text"
+      :data-submenu-title="itemText"
     >
       <li
-        v-for="(child, index) in item.children"
+        v-for="(child, index) in menuItem.children"
         :key="child.id || index"
         @click.stop="onItemClick(child)"
         class="nav-item"
       >
         <router-link v-if="child.route" :to="child.route" class="nav-link">
-          {{ child.text }}
+          {{ getItemText(child) }}
         </router-link>
-        <a v-else class="nav-link">{{ child.text }}</a>
+        <a v-else class="nav-link">{{ getItemText(child) }}</a>
       </li>
     </ul>
   </li>
 
-  <li v-else-if="item.header" class="nav-item-header">
-    <div class="text-uppercase font-size-xs line-height-xs">
-      {{ item.text }}
-    </div>
-  </li>
-
-  <li v-else class="nav-item" @click="onItemClick(item)">
-    <router-link v-if="item.route" :to="item.route" class="nav-link">
-      <i :class="item.icon"></i>
-      <span>{{ item.text }}</span>
+  <li v-else class="nav-item" @click="onItemClick(menuItem)">
+    <router-link v-if="menuItem.route" :to="menuItem.route" class="nav-link">
+      <i :class="menuItem.icon" class="text-muted"></i>
+      <span>{{ itemText }}</span>
     </router-link>
     <a v-else class="nav-link">
-      <i :class="item.icon"></i>
-      <span>{{ item.text }}</span>
+      <i :class="menuItem.icon" class="text-muted"></i>
+      <span>{{ itemText }}</span>
     </a>
   </li>
 </template>
@@ -61,19 +57,29 @@ export default {
     },
   },
 
+  data() {
+    return {
+      menuItem: this.item,
+    }
+  },
+
   computed: {
-    itemCss() {
-      if (this.item.isOpen)
-        return 'nav-item nav-item-submenu nav-item-expanded nav-item-open'
-      else return 'nav-item nav-item-submenu'
+    itemText() {
+      return this.getItemText(this.menuItem)
     },
   },
 
   methods: {
+    expand() {
+      this.menuItem.isOpen = !this.menuItem.isOpen
+    },
     onItemClick(item) {
       if (item.children && item.children.length) {
         this.$emit('on:click', item)
       } else if (item.onClick) item.onClick(item)
+    },
+    getItemText(item) {
+      return typeof item.text === 'function' ? item.text(this) : item.text
     },
   },
 }

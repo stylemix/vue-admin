@@ -8,6 +8,16 @@ const Config = {
    * Default (home) route
    */
   defaultRoute: null,
+
+  /**
+   * Menu for sidebar
+   */
+  sidebarMenu: [],
+
+  /**
+   * Dropdown menu for account in navbar
+   */
+  accountMenu: [],
 }
 
 export default Config

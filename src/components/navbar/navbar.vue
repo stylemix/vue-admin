@@ -1,9 +1,9 @@
 <template>
   <div class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand">
-      <a href="#" class="d-inline-block">
+      <router-link :to="logoRoute" class="d-inline-block">
         <img :src="logo" alt="logo" />
-      </a>
+      </router-link>
     </div>
 
     <div class="d-md-none">
@@ -26,9 +26,10 @@
 
     <div class="collapse navbar-collapse" id="navbar-mobile">
       <ul class="navbar-nav">
-        <li @click="onHamburgerClick" class="nav-item">
+        <li class="nav-item">
           <a
-            href="#"
+            href
+            @click.prevent="onHamburgerClick"
             class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block"
           >
             <i class="icon-paragraph-justify3"></i>
@@ -45,6 +46,8 @@
 
 <script>
 import NavbarUser from './navbar-user'
+import Config from '../../config'
+
 export default {
   name: 'Navbar',
   components: { NavbarUser },
@@ -54,7 +57,9 @@ export default {
       default: null,
     },
   },
-
+  computed: {
+    logoRoute: () => Config.defaultRoute,
+  },
   methods: {
     onHamburgerClick() {
       const classList = document.body.classList

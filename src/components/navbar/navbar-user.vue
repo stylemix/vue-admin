@@ -1,5 +1,5 @@
 <template>
-  <li v-if="user" class="nav-item dropdown dropdown-user">
+  <li v-if="account" class="nav-item dropdown dropdown-user">
     <a
       @click="() => (show = !show)"
       @focusout="onFocusOut"
@@ -9,15 +9,15 @@
       aria-expanded="false"
     >
       <img
-        :src="user && user.avatar ? user.avatar : ''"
+        :src="account && account.avatar ? account.avatar : ''"
         class="rounded-circle"
         alt=""
       />
-      <span>{{ user.name }}</span>
+      <span>{{ account.name }}</span>
     </a>
 
     <div class="dropdown-menu dropdown-menu-right" :class="{ show: show }">
-      <template v-for="(action, index) in actions">
+      <template v-for="(action, index) in sortedMenu">
         <div v-if="action.divider" :key="index" class="dropdown-divider"></div>
         <router-link
           v-else-if="action.route"
@@ -26,8 +26,8 @@
           class="dropdown-item"
           @click="action.onClick && !action.route ? action.onClick(action) : ''"
         >
-          <i v-if="action.icon" :class="action.icon"></i>{{ action.text }}
-          {{ action.text }}
+          <i v-if="action.icon" :class="action.icon"></i>
+          {{ getItemText(action) }}
         </router-link>
         <a
           v-else
@@ -35,17 +35,17 @@
           class="dropdown-item"
           :key="index"
           @click="action.onClick && !action.route ? action.onClick(action) : ''"
-          ><i v-if="action.icon" :class="action.icon"></i>{{ action.text }}</a
         >
+          <i v-if="action.icon" :class="action.icon"></i>
+          {{ getItemText(action) }}
+        </a>
       </template>
-      <a @click="logout" class="dropdown-item">
-        <i class="icon-switch2"></i>Logout
-      </a>
     </div>
   </li>
 </template>
 
 <script>
+import sortBy from 'lodash-es/sortBy'
 import { mapGetters } from 'vuex'
 import Config from '../../config'
 
@@ -59,17 +59,20 @@ export default {
   },
 
   methods: {
-    logout() {
-      if (Config.authHandler && Config.authHandler.onLogout) {
-        Config.authHandler.onLogout()
-      }
-    },
     onFocusOut() {
       // handle action click before focus out!!!
       setTimeout(() => (this.show = !this.show), 500)
     },
+    getItemText(item) {
+      return typeof item.text === 'function' ? item.text(this) : item.text
+    },
   },
 
-  computed: mapGetters('admin-account', ['user', 'actions']),
+  computed: {
+    ...mapGetters('admin-auth', ['account']),
+    sortedMenu() {
+      return sortBy(Config.accountMenu, ['order'])
+    },
+  },
 }
 </script>

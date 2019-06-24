@@ -736,8 +736,7 @@
 
 					// Links
 					> .nav-link {
-						justify-content: center;
-						padding-left: 0;
+						justify-content: start;
 						padding-right: 0;
 
 						// Icons
@@ -1036,7 +1035,6 @@
 				// All except content sidebar
 				&:not(.sidebar-component) {
 					position: static;
-					@include transition(none);
 
 					// Sidebar content
 					&:not(.sidebar-fixed) .sidebar-content {

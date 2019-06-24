@@ -6,4 +6,8 @@
  * auth module.
  */
 
-export default {}
+export default {
+  account({ account }) {
+    return account
+  },
+}

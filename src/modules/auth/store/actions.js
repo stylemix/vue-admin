@@ -51,11 +51,11 @@ export const check = context => {
   return false
 }
 
-export const find = () => {
+export const find = context => {
   return new AccountApi()
     .user()
     .then(result => {
-      store.commit('admin-account/setUser', result.data)
+      context.commit('account', result.data)
       return result.data
     })
     .catch(rejection => {
