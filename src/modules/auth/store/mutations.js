@@ -48,4 +48,8 @@ export default {
   account(state, account) {
     state.account = account
   },
+
+  attemptedRoute(state, attemptedRoute) {
+    state.attemptedRoute = attemptedRoute
+  },
 }

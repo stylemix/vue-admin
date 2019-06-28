@@ -90,15 +90,13 @@ export default {
             return
           }
 
-          AdminStore.dispatch(
+          return AdminStore.dispatch(
             'admin-auth/login',
             { token, expiresIn },
             expiresIn,
           ).then(() => {
-            AdminStore.dispatch('admin-auth/find')
-            if (Config.defaultRoute) {
-              AdminRouter.push(Config.defaultRoute)
-            }
+            this.redirect()
+            return AdminStore.dispatch('admin-auth/find')
           })
         })
         .catch(response => {
@@ -106,11 +104,26 @@ export default {
             this.setValidationErrors(response.data.errors)
             return
           }
-          //eslint-disable-next-line
-          console.error(response)
+
+          if (this.$toast && response.data && response.data.message) {
+            this.$toast && this.$toast.error(response.data.message)
+          }
         })
 
       this.$uiBlocker(promise, this.$el)
+    },
+    redirect() {
+      // First check for last attempted and redirect to that route
+      // otherwise redirect to default route from config
+      if (AdminStore.state['admin-auth'].attemptedRoute) {
+        AdminRouter.push(AdminStore.state['admin-auth'].attemptedRoute)
+        AdminStore.commit('admin-auth/attemptedRoute', null)
+        return
+      }
+
+      if (Config.defaultRoute) {
+        AdminRouter.push(Config.defaultRoute)
+      }
     },
   },
 }

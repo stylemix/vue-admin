@@ -77,7 +77,12 @@ AdminRouter.beforeEach((to, from, next) => {
     /*
      * If the user is not authenticated and visits
      * a page that requires authentication, redirect to the login page
+     * and remember that page to return back
      */
+    AdminStore.commit('admin-auth/attemptedRoute', {
+      name: to.name,
+      params: to.params,
+    })
     next({ name: AuthConfig.routes.login })
   } else if (
     to.matched.some(m => m.meta.guest) &&
