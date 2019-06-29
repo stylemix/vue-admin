@@ -7,6 +7,7 @@
 
 export default {
   authenticated: false,
+  token: null,
   expires: 0,
   account: null,
   attemptedRoute: null,

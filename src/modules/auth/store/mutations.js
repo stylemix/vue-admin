@@ -15,19 +15,20 @@ const prefix = AuthConfig.storagePrefix || 'admin-console'
 /* eslint-disable no-param-reassign */
 export default {
   [CHECK](state) {
-    state.authenticated = !!localStorage.getItem(`${prefix}.user-token`)
+    const token = localStorage.getItem(`${prefix}.user-token`)
+    state.token = token
+    state.authenticated = !!token
     if (state.authenticated) {
       state.expires = localStorage.getItem(`${prefix}.user-token-expires`)
       if (Vue.$http) {
-        Vue.$http.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-          `${prefix}.user-token`,
-        )}`
+        Vue.$http.defaults.headers.common.Authorization = `Bearer ${token}`
       }
     }
   },
 
   [LOGIN](state, { token, expiresIn }) {
     state.authenticated = true
+    state.token = token
     state.expires = Date.now() + expiresIn * 1000
     localStorage.setItem(`${prefix}.user-token`, token)
     localStorage.setItem(`${prefix}.user-token-expires`, state.expires)
@@ -38,6 +39,8 @@ export default {
 
   [LOGOUT](state) {
     state.authenticated = false
+    state.token = null
+    state.expires = 0
     localStorage.removeItem(`${prefix}.user-token`)
     localStorage.removeItem(`${prefix}.user-token-expires`)
     if (Vue.$http) {
