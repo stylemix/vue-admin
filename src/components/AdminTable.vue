@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header">
+    <div v-if="hasHeaderBar" class="card-header">
       <div v-show="selected.length" class="float-right">
         Selected ({{ selected.length }})
         <b-dropdown variant="light" right text="Actions">
@@ -25,7 +25,7 @@
         ref="table"
         :fields="fields"
         :items="itemsProvider"
-        v-model="items"
+        v-model="itemsLoaded"
         :sort-by="sortBy"
         :sort-desc="sortDesc"
         :filter="filter"
@@ -89,6 +89,9 @@
           </b-button>
           <slot :item="item" name="actions" />
         </template>
+        <template slot-scope="row" slot="row-details">
+          <slot v-bind="row" name="row-details" />
+        </template>
       </b-table>
     </div>
     <div class="card-footer flex justify-between items-center">
@@ -111,6 +114,14 @@ import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './AdminSearchForm.vue'
 import AdminApi from '../plugins/api'
 
+function value(prop, ...args) {
+  if (typeof prop === 'function') {
+    return prop.apply(this, args)
+  }
+
+  return prop
+}
+
 export default {
   name: 'AdminTable',
 
@@ -122,6 +133,10 @@ export default {
     columns: {
       type: Array,
       default: () => [],
+    },
+    items: {
+      type: Array,
+      default: null,
     },
     base: {
       type: String,
@@ -152,17 +167,20 @@ export default {
       default: 15,
     },
     rowActions: {
-      type: Function,
+      type: [Array, Function],
       default: () => ['edit', 'delete'],
     },
     onEditItem: {
+      type: Function,
+    },
+    onDetailsItem: {
       type: Function,
     },
     onDeleteItem: {
       type: Function,
     },
     bulkActions: {
-      type: Function,
+      type: [Array, Function],
       default: () => ['delete'],
     },
     onBulkDelete: {
@@ -202,7 +220,7 @@ export default {
     return {
       config: {},
       api: null,
-      items: [],
+      itemsLoaded: [],
       selected: [],
       total: 0,
       page: 1,
@@ -216,11 +234,13 @@ export default {
     fields() {
       const fields = []
 
-      fields.push({
-        key: '_checkbox',
-        label: '',
-        sortable: false,
-      })
+      if (this.hasBulkActions) {
+        fields.push({
+          key: '_checkbox',
+          label: '',
+          sortable: false,
+        })
+      }
 
       this.columns.forEach(column => {
         fields.push(column)
@@ -237,14 +257,22 @@ export default {
 
       return fields
     },
+    hasBulkActions() {
+      return value.call(this, this.bulkActions).length > 0
+    },
+    hasHeaderBar() {
+      return (
+        this.hasBulkActions || (this.searchFields && this.searchFields.length)
+      )
+    },
     isAllSelected() {
-      if (!this.items.length) {
+      if (!this.itemsLoaded.length) {
         return false
       }
 
-      const selected = intersection(this.selected, map(this.items, 'id'))
+      const selected = intersection(this.selected, map(this.itemsLoaded, 'id'))
 
-      return selected.length === this.items.length
+      return selected.length === this.itemsLoaded.length
     },
   },
 
@@ -273,6 +301,10 @@ export default {
     },
 
     itemsProvider(ctx) {
+      if (this.items) {
+        return this.items
+      }
+
       this.initApi()
       this.api.setParameters(this.params)
       this.api.setParameter('per_page', ctx.perPage)
@@ -301,7 +333,7 @@ export default {
     buildRowActions(item) {
       const actions = []
 
-      this.rowActions(item).forEach(action => {
+      value.call(this, this.rowActions, item).forEach(action => {
         if (action === 'edit') {
           actions.push({
             label: 'Edit',
@@ -309,6 +341,16 @@ export default {
               this.onEditItem
                 ? this.onEditItem(item)
                 : this.defaultOnEditItem(item)
+            },
+          })
+        } else if (action === 'details') {
+          actions.push({
+            label: 'Details',
+            variant: 'light',
+            handler: () => {
+              this.onDetailsItem
+                ? this.onDetailsItem(item)
+                : this.defaultOnDetailsItem(item)
             },
           })
         } else if (action === 'delete') {
@@ -341,7 +383,7 @@ export default {
     buildBulkActions() {
       const actions = []
 
-      this.bulkActions().forEach(action => {
+      value.call(this, this.bulkActions).forEach(action => {
         if (action === 'delete') {
           actions.push({
             label: 'Delete selected',
@@ -390,6 +432,10 @@ export default {
           id: item.id,
         },
       })
+    },
+
+    defaultOnDetailsItem(item) {
+      this.$set(item, '_showDetails', true)
     },
 
     defaultOnDeleteItem(item) {
