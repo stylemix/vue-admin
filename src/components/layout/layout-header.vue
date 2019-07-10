@@ -10,18 +10,20 @@
               class="icon-arrow-left52 mr-2"
             ></i>
             {{ header }}
+            <small v-if="headerSmall">{{ headerSmall }}</small>
           </h4>
         </slot>
-        <a href="#" class="header-elements-toggle text-default d-md-none"
-          ><i class="icon-more"></i
-        ></a>
+        <a href class="header-elements-toggle text-default d-md-none">
+          <i class="icon-more"></i>
+        </a>
       </div>
 
       <div class="header-elements d-none">
         <div class="d-flex justify-content-center">
-          <a
+          <button
             v-for="(action, index) in actions"
             :key="action.id || index"
+            type="button"
             @click="onActionClick(action)"
             class="btn btn-link btn-float text-default"
           >
@@ -34,7 +36,7 @@
                 <span>{{ action.text }}</span>
               </slot>
             </template>
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -54,6 +56,11 @@ export default {
     },
 
     header: {
+      type: String,
+      default: '',
+    },
+
+    headerSmall: {
       type: String,
       default: '',
     },
