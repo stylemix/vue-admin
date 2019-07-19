@@ -2,7 +2,7 @@
   <form class="form-inline" @submit.prevent="">
     <fields :fields="fields.all()" :model="model" layout="inline" />
     <b-button variant="light" type="button" class="mb-2" @click.prevent="clear">
-      Clear
+      {{ strings.table.search_clear }}
     </b-button>
   </form>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import { FormMixin } from 'stylemix-base'
 import debounce from 'lodash-es/debounce'
+import strings from '../strings'
 
 export default {
   name: 'AdminSearchForm',
@@ -30,6 +31,12 @@ export default {
     return {
       model: Object.assign({}, this.searchData),
     }
+  },
+
+  computed: {
+    strings() {
+      return strings
+    },
   },
 
   created() {

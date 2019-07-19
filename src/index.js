@@ -19,6 +19,7 @@ export const AdminLayout = layout
 export const AdminPageHeader = layoutHeader
 export const AdminConfig = config
 export const AdminStore = store
+export { default as AdminPlugin } from './plugin'
 export { default as AdminApi } from './plugins/api'
 export { default as AuthMixin } from './modules/auth/AuthMixin'
 export { default as AdminSearchForm } from './components/AdminSearchForm'

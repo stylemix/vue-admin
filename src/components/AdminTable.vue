@@ -2,7 +2,7 @@
   <div class="card">
     <div v-if="hasHeaderBar" class="card-header">
       <div v-show="selected.length" class="float-right">
-        Selected ({{ selected.length }})
+        {{ strings.table.selected.replace('{count}', selected.length) }}
         <b-dropdown variant="light" right text="Actions">
           <b-dropdown-item
             v-for="(action, index) in buildBulkActions()"
@@ -102,7 +102,9 @@
         :total-rows="total"
         :per-page="perPage"
       />
-      <div>Total records: {{ total }}</div>
+      <div>
+        {{ strings.table.total_records.replace('{count}', total) }}
+      </div>
     </div>
   </div>
 </template>
@@ -113,6 +115,7 @@ import map from 'lodash-es/map'
 import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './AdminSearchForm.vue'
 import AdminApi from '../plugins/api'
+import strings from '../strings'
 
 function value(prop, ...args) {
   if (typeof prop === 'function') {
@@ -194,7 +197,9 @@ export default {
             attribute: 'query',
             component: 'text-field',
             type: 'search',
-            placeholder: 'Search ...',
+            get placeholder() {
+              return strings.table.search
+            },
           },
         ]
       },
@@ -274,6 +279,9 @@ export default {
 
       return selected.length === this.itemsLoaded.length
     },
+    strings() {
+      return strings
+    },
   },
 
   created() {
@@ -336,7 +344,7 @@ export default {
       value.call(this, this.rowActions, item).forEach(action => {
         if (action === 'edit') {
           actions.push({
-            label: 'Edit',
+            label: this.strings.table.action_edit,
             handler: () => {
               this.onEditItem
                 ? this.onEditItem(item)
@@ -345,7 +353,7 @@ export default {
           })
         } else if (action === 'details') {
           actions.push({
-            label: 'Details',
+            label: this.strings.table.action_details,
             variant: 'light',
             handler: () => {
               this.onDetailsItem
@@ -355,7 +363,7 @@ export default {
           })
         } else if (action === 'delete') {
           actions.push({
-            label: 'Delete',
+            label: this.strings.table.action_delete,
             variant: 'danger',
             handler: () => {
               this.onDeleteItem
@@ -386,7 +394,7 @@ export default {
       value.call(this, this.bulkActions).forEach(action => {
         if (action === 'delete') {
           actions.push({
-            label: 'Delete selected',
+            label: this.strings.table.action_delete_selected,
             variant: 'danger',
             handler: selected => {
               this.onBulkDelete
@@ -441,8 +449,8 @@ export default {
     defaultOnDeleteItem(item) {
       this.$alert
         .question(
-          'Proceed with deleting?',
-          'Please, confirm deleting this record.',
+          this.strings.table.delete_confirmation_title,
+          this.strings.table.delete_confirmation,
           {
             showCancelButton: true,
           },
@@ -459,11 +467,11 @@ export default {
         })
     },
 
-    defaultOnBulkDelete: selected => {
+    defaultOnBulkDelete(selected) {
       this.$alert
         .question(
-          'Proceed with deleting?',
-          'Please, confirm deleting selected records.',
+          this.strings.table.delete_confirmation_title,
+          this.strings.table.delete_selected_confirmation,
           {
             showCancelButton: true,
           },
