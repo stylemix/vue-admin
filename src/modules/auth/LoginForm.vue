@@ -12,10 +12,9 @@
 
 <script>
 import { FormMixin } from 'stylemix-base'
-import AdminStore from '../../store'
+import Admin from '../../admin'
 import Config from '../../config'
 import AuthApi from './AuthApi'
-import AdminRouter from '../../router'
 import strings from '../../strings'
 
 export default {
@@ -79,14 +78,12 @@ export default {
             return
           }
 
-          return AdminStore.dispatch(
-            'admin-auth/login',
-            { token, expiresIn },
-            expiresIn,
-          ).then(() => {
-            this.redirect()
-            return AdminStore.dispatch('admin-auth/find')
-          })
+          return Admin.store
+            .dispatch('adminAuth/login', { token, expiresIn }, expiresIn)
+            .then(() => {
+              this.redirect()
+              return Admin.store.dispatch('.adminAuth/find')
+            })
         })
         .catch(response => {
           if (response.status === 422) {
@@ -104,14 +101,14 @@ export default {
     redirect() {
       // First check for last attempted and redirect to that route
       // otherwise redirect to default route from config
-      if (AdminStore.state['admin-auth'].attemptedRoute) {
-        AdminRouter.push(AdminStore.state['admin-auth'].attemptedRoute)
-        AdminStore.commit('admin-auth/attemptedRoute', null)
+      if (Admin.store.state['adminAuth'].attemptedRoute) {
+        Admin.router.push(Admin.store.state['adminAuth'].attemptedRoute)
+        Admin.store.commit('adminAuth/attemptedRoute', null)
         return
       }
 
       if (Config.defaultRoute) {
-        AdminRouter.push(Config.defaultRoute)
+        Admin.router.push(Config.defaultRoute)
       }
     },
   },

@@ -11,7 +11,7 @@
 <script>
 import { FormMixin } from 'stylemix-base'
 import AuthApi from './AuthApi'
-import AdminRouter from '../../router'
+import Admin from '../../admin'
 import AuthRoutesMixin from './AuthRoutesMixin'
 import strings from '../../strings'
 
@@ -62,7 +62,7 @@ export default {
         .forgot(this.model.email)
         .then(result => {
           this.$alert.success(result.message)
-          AdminRouter.push(this.loginRoute)
+          Admin.router.push(this.loginRoute)
         })
         .catch(response => {
           if (response.status === 422) {

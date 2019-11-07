@@ -35,6 +35,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SidebarUser',
 
-  computed: mapGetters('admin-auth', ['account']),
+  computed: mapGetters('adminAuth', ['account']),
 }
 </script>

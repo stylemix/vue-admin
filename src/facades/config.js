@@ -6,15 +6,19 @@ import AccountConfig from '../modules/account/config'
 
 export default {
   setLogo(url) {
-    return store.dispatch('admin-preferences/setLogoUrl', url)
+    return store.commit('adminConfig/logoUrl', url)
   },
 
   logo() {
-    return store.getters['admin-preferences/getLogoUrl']
+    return store.state.adminConfig.logoUrl
   },
 
   setDefaultRoute(route) {
-    Config.defaultRoute = route
+    return store.commit('adminConfig/defaultRoute', route)
+  },
+
+  defaultRoute() {
+    return store.state.adminConfig.defaultRoute
   },
 
   /**

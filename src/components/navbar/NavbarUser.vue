@@ -49,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin-auth', ['account']),
+    ...mapGetters('adminAuth', ['account']),
     sortedMenu() {
       return sortBy(Config.accountMenu, ['order'])
     },

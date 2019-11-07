@@ -3,7 +3,6 @@ export default {
   state: {
     navigation: [],
     pageActions: [],
-    pageHeader: null,
   },
   mutations: {
     pushMenuItem(state, { key, item }) {
@@ -14,9 +13,6 @@ export default {
     },
     setMenuItems(state, { key, items }) {
       state[key] = items
-    },
-    pageHeader(state, pageHeader) {
-      state.pageHeader = pageHeader
     },
   },
 }

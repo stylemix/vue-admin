@@ -1,8 +1,8 @@
-import AdminRouter from '../../router'
+import Admin from '../../admin'
 import AdminConfig from '../../facades/config'
 import AccountConfig from './config'
 
-AdminRouter.addRoutes([
+Admin.router.addRoutes([
   {
     path: '/account',
     name: 'account',

@@ -16,8 +16,7 @@
 
 <script>
 import { FormMixin } from 'stylemix-base'
-import AdminStore from '../../store'
-import AdminRouter from '../../router'
+import Admin from '../../admin'
 import Config from '../../config'
 import AuthApi from './AuthApi'
 import RegisterView from './RegisterView'
@@ -103,15 +102,13 @@ export default {
             return
           }
 
-          AdminStore.dispatch(
-            'admin-auth/login',
-            { token, expiresIn },
-            expiresIn,
-          ).then(() => {
-            if (Config.defaultRoute) {
-              AdminRouter.push(Config.defaultRoute)
-            }
-          })
+          Admin.store
+            .dispatch('adminAuth/login', { token, expiresIn }, expiresIn)
+            .then(() => {
+              if (Config.defaultRoute) {
+                Admin.router.push(Config.defaultRoute)
+              }
+            })
         })
         .catch(response => {
           if (response.status === 422) {

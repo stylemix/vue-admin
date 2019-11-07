@@ -1,13 +1,24 @@
 import merge from 'lodash-es/merge'
+import { createHooks } from '@wordpress/hooks'
 import strings from './strings'
 import ConfigFacade from './facades/config'
-import Config from './config'
 import AuthConfig from './modules/auth/config'
 import AccountConfig from './modules/account/config'
 import router from './router'
+import store from './store'
 import Menu from './facades/menu'
 
 const Admin = {
+  /**
+   * Event callbacks for module/plugins
+   */
+  hooks: createHooks(),
+
+  /**
+   * Root Vue application instance
+   */
+  app: null,
+
   /**
    * @type {ConfigFacade}
    */
@@ -17,6 +28,11 @@ const Admin = {
    * VueRouter instance
    */
   router,
+
+  /**
+   * Vuex store instance
+   */
+  store,
 
   /**
    * Main navigation menu
@@ -31,15 +47,6 @@ const Admin = {
    * @type {Menu}
    */
   pageActions: new Menu('pageActions'),
-
-  /**
-   * Register new bootstrapper
-   *
-   * @param {Function} fx
-   */
-  registerBootstraper(fx) {
-    Config.bootstrappers.push(fx)
-  },
 
   /**
    * Use authentication module (login, register, forgot).
@@ -71,9 +78,11 @@ const Admin = {
     require('./components/global')
 
     // Run bootstrapper functions
-    Config.bootstrappers.forEach(fx => fx())
+    Admin.hooks.doAction('bootstrap')
 
-    return require('./app')
+    Admin.app = require('./app').default
+
+    return Admin.app
   },
 
   install() {},

@@ -9,6 +9,7 @@
 import * as types from './mutation-types'
 import AuthApi from '../AuthApi'
 import AccountApi from '../../account/AccountApi'
+import Admin from '../../../admin'
 
 let timer
 
@@ -44,7 +45,7 @@ export const check = context => {
 
   if (context.state.authenticated) {
     initRefresh(context)
-    return true
+    return find(context)
   }
 
   return false
@@ -55,6 +56,7 @@ export const find = context => {
     .user()
     .then(result => {
       context.commit('account', result.data)
+      Admin.hooks.doAction('authenticated')
       return result.data
     })
     .catch(rejection => {

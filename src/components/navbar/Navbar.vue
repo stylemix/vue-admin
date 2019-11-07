@@ -1,8 +1,8 @@
 <template>
   <b-navbar type="dark" toggleable="md">
     <b-navbar-brand>
-      <router-link :to="logoRoute" class="d-inline-block">
-        <img :src="logo" alt="logo" />
+      <router-link :to="defaultRoute" class="d-inline-block">
+        <img :src="logoResolved" alt="logo" />
       </router-link>
     </b-navbar-brand>
     <div class="d-none d-md-block">
@@ -35,7 +35,7 @@
 
 <script>
 import NavbarUser from './NavbarUser'
-import Config from '../../config'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AdminNavbar',
@@ -47,7 +47,13 @@ export default {
     },
   },
   computed: {
-    logoRoute: () => Config.defaultRoute,
+    ...mapState('adminConfig', {
+      logoUrl: 'logoUrl',
+      defaultRoute: 'defaultRoute',
+    }),
+    logoResolved() {
+      return this.logo || this.logoUrl
+    },
   },
   methods: {
     onHamburgerClick() {

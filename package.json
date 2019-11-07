@@ -11,6 +11,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@wordpress/hooks": "^2.6.0",
     "bootstrap-vue": "^2.0.0-rc.19",
     "core-js": "^2.6.5",
     "pluralize": "^7.0.0",

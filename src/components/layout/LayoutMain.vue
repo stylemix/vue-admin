@@ -1,13 +1,13 @@
 <template>
   <div class="root-container-stm">
     <slot name="navbar">
-      <navbar :logo="logo" />
+      <navbar />
     </slot>
     <div class="page-content">
-      <sidebar ref="sidebar" />
+      <sidebar />
       <div class="content-wrapper">
         <slot name="header">
-          <page-header ref="pageHeader" />
+          <page-header />
         </slot>
         <div class="content">
           <slot />
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
 import Navbar from '../navbar/Navbar'
 import Sidebar from '../sidebar/Sidebar'
 import PageHeader from './PageHeader'
@@ -30,14 +29,6 @@ export default {
     Sidebar,
     Navbar,
     PageHeader,
-  },
-
-  computed: {
-    ...mapGetters('admin-preferences', ['logo']),
-  },
-
-  methods: {
-    ...mapMutations('admin', ['pageHeader']),
   },
 }
 </script>

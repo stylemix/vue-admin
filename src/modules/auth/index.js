@@ -1,22 +1,19 @@
 import Vue from 'vue'
 import Axios from 'axios'
 import { mapState } from 'vuex'
-import AdminRouter from '../../router'
-import AdminStore from '../../store'
+import Admin from '../../admin'
 import AuthStore from './store'
-import Config from '../../config'
 import AuthConfig from './config'
 import AdminConfig from '../../facades/config'
 import LoginForm from './LoginForm'
 import strings from '../../strings'
-import Admin from '../../admin'
 import LoginView from './LoginView'
 import ForgotView from './ForgotView'
 import RegisterView from './RegisterView'
 
-AdminStore.registerModule('admin-auth', AuthStore)
+Admin.store.registerModule('adminAuth', AuthStore)
 
-AdminRouter.addRoutes([
+Admin.router.addRoutes([
   {
     path: '/login',
     name: AuthConfig.routes.login,
@@ -29,7 +26,7 @@ AdminRouter.addRoutes([
 ])
 
 if (AuthConfig.withRegistration) {
-  AdminRouter.addRoutes([
+  Admin.router.addRoutes([
     {
       path: '/register',
       name: AuthConfig.routes.register,
@@ -43,7 +40,7 @@ if (AuthConfig.withRegistration) {
 }
 
 if (AuthConfig.withForgot) {
-  AdminRouter.addRoutes([
+  Admin.router.addRoutes([
     {
       path: '/forgot-password',
       name: AuthConfig.routes.forgot,
@@ -57,9 +54,9 @@ if (AuthConfig.withForgot) {
 }
 
 AuthConfig.onLogout = () => {
-  AdminStore.dispatch('admin-auth/logout').then(() => {
-    AdminStore.commit('admin-auth/account', null)
-    AdminRouter.push({ name: AuthConfig.routes.login })
+  Admin.store.dispatch('adminAuth/logout').then(() => {
+    Admin.store.commit('adminAuth/account', null)
+    Admin.router.push({ name: AuthConfig.routes.login })
   })
 }
 
@@ -68,7 +65,7 @@ if (AuthConfig.withHttpInterceptor) {
     response => response,
     error => {
       if (error.response.status === 401) {
-        AdminStore.dispatch('admin-auth/logout')
+        Admin.store.dispatch('adminAuth/logout')
       }
 
       return Promise.reject(error)
@@ -76,30 +73,30 @@ if (AuthConfig.withHttpInterceptor) {
   )
 }
 
-AdminRouter.beforeEach((to, from, next) => {
+Admin.router.beforeEach((to, from, next) => {
   if (
     to.matched.some(m => m.meta.auth) &&
-    !AdminStore.state['admin-auth'].authenticated
+    !Admin.store.state.adminAuth.authenticated
   ) {
     /*
      * If the user is not authenticated and visits
      * a page that requires authentication, redirect to the login page
      * and remember that page to return back
      */
-    AdminStore.commit('admin-auth/attemptedRoute', {
+    Admin.store.commit('adminAuth/attemptedRoute', {
       name: to.name,
       params: to.params,
     })
     next({ name: AuthConfig.routes.login })
   } else if (
     to.matched.some(m => m.meta.guest) &&
-    AdminStore.state['admin-auth'].authenticated
+    Admin.store.state.adminAuth.authenticated
   ) {
     /*
      * If the user is authenticated and visits
      * an guest page, redirect to the dashboard page
      */
-    next(Config.defaultRoute)
+    next(Admin.store.adminConfig.defaultRoute)
   } else {
     next()
   }
@@ -108,21 +105,17 @@ AdminRouter.beforeEach((to, from, next) => {
 // Allow access some useful state data for all components
 Vue.mixin({
   computed: {
-    ...mapState('admin-auth', {
+    ...mapState('adminAuth', {
       $authenticated: 'authenticated',
     }),
-    ...mapState('admin-auth', {
+    ...mapState('adminAuth', {
       $account: 'account',
     }),
   },
 })
 
-Admin.registerBootstraper(function() {
-  AdminStore.dispatch('admin-auth/check').then(result => {
-    if (result) {
-      AdminStore.dispatch('admin-auth/find')
-    }
-  })
+Admin.hooks.addAction('bootstrap', 'adminAuth', function() {
+  Admin.store.dispatch('adminAuth/check')
 })
 
 AdminConfig.pushAccountMenuItems([
