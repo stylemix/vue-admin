@@ -6,7 +6,7 @@ export default {
       return
     }
 
-    Admin.pageActions.set(this.$options.pageActions())
+    Admin.pageActions.set(this.$options.pageActions.apply(this))
   },
   destroyed() {
     Admin.pageActions.reset()

@@ -24,6 +24,7 @@
             v-for="(action, index) in actionsResolved"
             :key="action.id || index"
             :variant="action.variant || 'primary'"
+            :to="action.route"
             @click="onActionClick(action)"
           >
             <slot :name="action.id || index" :action="action">
@@ -81,8 +82,6 @@ export default {
     onActionClick(action) {
       if (action.onClick) {
         action.onClick()
-      } else if (action.route) {
-        this.$router.push(action.route)
       }
     },
   },
