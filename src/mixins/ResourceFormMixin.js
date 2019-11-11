@@ -78,7 +78,6 @@ export default {
       if (response.status === 422) {
         this.setValidationErrors(response.data.errors)
         this.$emit('invalid', response.data)
-        this.$toast.error(response.data.message)
       }
     },
 
