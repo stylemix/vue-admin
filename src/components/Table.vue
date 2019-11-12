@@ -23,7 +23,7 @@
     <div class="table-responsive">
       <b-table
         ref="table"
-        v-model="itemsLoaded"
+        v-model="localItems"
         :fields="fields"
         :items="itemsProvider"
         :sort-by="sortBy"
@@ -31,6 +31,7 @@
         :filter="filter"
         :per-page="perPage"
         :current-page="page"
+        :busy="busy"
         show-empty
         small
       >
@@ -151,6 +152,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    busy: {
+      type: Boolean,
+      default: false,
+    },
     sortBy: {
       type: String,
       default: null,
@@ -227,7 +232,7 @@ export default {
     return {
       config: {},
       api: null,
-      itemsLoaded: [],
+      localItems: [],
       selected: [],
       total: 0,
       page: 1,
@@ -273,13 +278,13 @@ export default {
       )
     },
     isAllSelected() {
-      if (!this.itemsLoaded.length) {
+      if (!this.localItems.length) {
         return false
       }
 
-      const selected = intersection(this.selected, map(this.itemsLoaded, 'id'))
+      const selected = intersection(this.selected, map(this.localItems, 'id'))
 
-      return selected.length === this.itemsLoaded.length
+      return selected.length === this.localItems.length
     },
     strings() {
       return strings
