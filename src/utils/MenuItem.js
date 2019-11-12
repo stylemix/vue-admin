@@ -1,3 +1,5 @@
+import { classTranslations } from './index'
+
 /**
  * @property {String} label Item label
  * @property {String} id Item id
@@ -6,9 +8,10 @@
  * @property {Function} onClick Item click function
  * @property {Number} order Item sorting order number
  */
-export default class MenuItem {
+class MenuItem {
   constructor(props) {
     const defaults = {
+      label: '',
       children: null,
       isOpen: false,
       order: 0,
@@ -19,3 +22,8 @@ export default class MenuItem {
     }
   }
 }
+
+// Add translatable props
+classTranslations(MenuItem, ['label'])
+
+export default MenuItem

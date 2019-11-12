@@ -1,6 +1,4 @@
-import merge from 'lodash-es/merge'
 import { createHooks } from '@wordpress/hooks'
-import strings from './strings'
 import ConfigFacade from './facades/config'
 import AuthConfig from './modules/auth/config'
 import AccountConfig from './modules/account/config'
@@ -42,6 +40,13 @@ const Admin = {
   nav: new Menu('navigation'),
 
   /**
+   * Main navigation menu
+   *
+   * @type {Menu}
+   */
+  accountNav: new Menu('accountNav'),
+
+  /**
    * Page actions menu
    *
    * @type {Menu}
@@ -72,6 +77,7 @@ const Admin = {
   run() {
     require('./plugins/bootstrap')
     require('./plugins/axios')
+    require('./plugins/i18n')
     require('./plugins/ui-blocker')
     require('./plugins/moment')
     require('./plugins/alerts')
@@ -87,9 +93,10 @@ const Admin = {
 
   install() {},
 
-  setStrings(newStrings) {
-    merge(strings, newStrings)
-  },
+  /**
+   * @deprecated
+   */
+  setStrings() {},
 }
 
 export default Admin

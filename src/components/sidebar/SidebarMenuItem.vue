@@ -10,13 +10,13 @@
         :class="[menuItem.icon, menuItem.isOpen ? '' : 'text-muted']"
       />
       <i v-else style="margin-left: 1rem"></i>
-      <span>{{ itemText }}</span>
+      <span>{{ menuItem.labelTranslated }}</span>
     </a>
 
     <ul
-      v-if="menuItem.children && menuItem.children.length > 0"
+      v-if="menuItem.children.length > 0"
       class="nav nav-group-sub"
-      :data-submenu-title="itemText"
+      :data-submenu-title="menuItem.labelTranslated"
     >
       <li
         v-for="(child, index) in menuItem.children"
@@ -25,9 +25,9 @@
         @click.stop="onItemClick(child)"
       >
         <router-link v-if="child.route" :to="child.route" class="nav-link">
-          {{ getItemText(child) }}
+          {{ child.labelTranslated }}
         </router-link>
-        <a v-else class="nav-link">{{ getItemText(child) }}</a>
+        <a v-else class="nav-link">{{ child.labelTranslated }}</a>
       </li>
     </ul>
   </li>
@@ -35,18 +35,18 @@
   <li v-else class="nav-item" @click="onItemClick(menuItem)">
     <router-link v-if="menuItem.route" :to="menuItem.route" class="nav-link">
       <i :class="menuItem.icon" class="text-muted"></i>
-      <span>{{ itemText }}</span>
+      <span>{{ menuItem.labelTranslated }}</span>
     </router-link>
     <a v-else class="nav-link">
       <i :class="menuItem.icon" class="text-muted"></i>
-      <span>{{ itemText }}</span>
+      <span>{{ menuItem.labelTranslated }}</span>
     </a>
   </li>
 </template>
 
 <script>
 export default {
-  name: 'SidebarMenuItem',
+  name: 'AdminSidebarMenuItem',
 
   props: {
     item: {
@@ -63,12 +63,6 @@ export default {
     }
   },
 
-  computed: {
-    itemText() {
-      return this.getItemText(this.menuItem)
-    },
-  },
-
   methods: {
     expand() {
       this.menuItem.isOpen = !this.menuItem.isOpen
@@ -77,9 +71,6 @@ export default {
       if (item.children && item.children.length) {
         this.$emit('on:click', item)
       } else if (item.onClick) item.onClick(item)
-    },
-    getItemText(item) {
-      return typeof item.text === 'function' ? item.text(this) : item.text
     },
   },
 }

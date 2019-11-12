@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state: {
     navigation: [],
+    accountNav: [],
     pageActions: [],
   },
   mutations: {

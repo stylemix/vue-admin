@@ -1,17 +1,16 @@
 import Vue from 'vue'
 import swal from 'sweetalert2'
 import defaults from 'lodash-es/defaults'
-import strings from '../../strings'
 
 const types = ['success', 'error', 'warning', 'info', 'question']
 const $alert = {}
 const $toast = {}
 const alertOptions = {
   get confirmButtonText() {
-    return strings.alerts.ok
+    return Vue.$t('admin.alerts.ok')
   },
   get cancelButtonText() {
-    return strings.alerts.cancel
+    return Vue.$t('admin.alerts.cancel')
   },
 }
 const toastOptions = {

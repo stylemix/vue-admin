@@ -25,7 +25,7 @@ import sortBy from 'lodash-es/sortBy'
 import SidebarMenuItem from './SidebarMenuItem'
 
 export default {
-  name: 'SidebarMenu',
+  name: 'AdminSidebarMenu',
   components: { SidebarMenuItem },
   props: {
     menu: {
@@ -38,9 +38,13 @@ export default {
   computed: {
     sortedMenu() {
       return groupBy(sortBy(this.menu, ['order']), item => {
-        let header =
-          typeof item.header === 'function' ? item.header(this) : item.header
-        return header || ''
+        if (!item.header) {
+          return ''
+        }
+
+        return item.header.startsWith('$t.')
+          ? this.$t(item.header.replace('$t.', ''))
+          : item.header
       })
     },
   },

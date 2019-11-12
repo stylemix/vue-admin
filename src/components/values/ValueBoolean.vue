@@ -18,8 +18,8 @@ export default {
   data() {
     let config = this.config || {}
     return {
-      trueText: config.trueText || this.$t('general.yes'),
-      falseText: config.falseText || this.$t('general.no'),
+      trueText: config.trueText || this.$t('admin.values.yes'),
+      falseText: config.falseText || this.$t('admin.values.no'),
     }
   },
 }

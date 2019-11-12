@@ -1,4 +1,5 @@
 import Admin from './admin'
+import * as utils from './utils'
 
 export default Admin
 export { Admin as AdminPlugin }
@@ -13,3 +14,4 @@ export { default as AdminSearchForm } from './components/SearchForm'
 export { default as AdminTable } from './components/Table'
 export { default as ResourceFormMixin } from './mixins/ResourceFormMixin'
 export { default as HasPageActions } from './mixins/HasPageActions'
+export { utils }

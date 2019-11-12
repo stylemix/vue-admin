@@ -3,6 +3,7 @@ import AxiosConfig from '../plugins/axios/config'
 import Config from '../config'
 import AuthConfig from '../modules/auth/config'
 import AccountConfig from '../modules/account/config'
+import Admin from '../admin'
 
 export default {
   setLogo(url) {
@@ -49,16 +50,28 @@ export default {
     Object.assign(AccountConfig, config)
   },
 
+  /**
+   * @param {MenuItem[]} menu
+   * @deprecated
+   */
   setAccountMenu(menu) {
     Config.accountMenu = menu
+    Admin.accountNav.set(menu)
   },
 
+  /**
+   * @param {MenuItem} item
+   * @deprecated
+   */
   pushAccountMenuItem(item) {
-    Config.accountMenu.push(item)
+    Admin.accountNav.push(item)
   },
 
+  /**
+   * @param {MenuItem[]} items
+   * @deprecated
+   */
   pushAccountMenuItems(items) {
-    const newMenu = Config.accountMenu
-    items.forEach(item => newMenu.push(item))
+    Admin.accountNav.append(items)
   },
 }

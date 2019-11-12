@@ -1,6 +1,8 @@
-import Vue from 'vue'
-
-const strings = Vue.observable({
+export default {
+  values: {
+    yes: 'Yes',
+    no: 'No',
+  },
   alerts: {
     ok: 'Ok',
     cancel: 'Cancel',
@@ -26,6 +28,7 @@ const strings = Vue.observable({
     login_desc: 'Enter your credentials below',
     login_register_text: 'Have not account yet?',
     login_forgot_text: 'Forgot password?',
+    logout: 'Logout',
     sign_in: 'Sign in',
     sign_up: 'Sign up',
     sign_out: 'Logout',
@@ -37,6 +40,4 @@ const strings = Vue.observable({
     forgot_desc: "We'll send you instructions in email",
     forgot_login_text: 'Back to login',
   },
-})
-
-export default strings
+}

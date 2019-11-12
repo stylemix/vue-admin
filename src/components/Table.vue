@@ -2,7 +2,7 @@
   <div class="card">
     <div v-if="hasHeaderBar" class="card-header">
       <div v-show="selected.length" class="float-right">
-        {{ strings.table.selected.set('{count}', selected.length) }}
+        {{ $t('admin.table.selected', { count: selected.length }) }}
         <b-dropdown variant="light" right text="Actions">
           <b-dropdown-item
             v-for="(action, index) in buildBulkActions()"
@@ -100,19 +100,20 @@
         :per-page="perPage"
       />
       <div>
-        {{ strings.table.total_records.replace('{count}', total) }}
+        {{ $t('admin.table.total_records', { count: total }) }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import get from 'lodash-es/get'
 import map from 'lodash-es/map'
 import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './SearchForm.vue'
 import AdminApi from '../plugins/api'
-import strings from '../strings'
+import { mapTranslations } from '../utils'
 
 function value(prop, ...args) {
   if (typeof prop === 'function') {
@@ -205,7 +206,7 @@ export default {
             component: 'text-field',
             type: 'search',
             get placeholder() {
-              return strings.table.search
+              return Vue.$t('admin.table.search')
             },
           },
         ]
@@ -255,7 +256,10 @@ export default {
       }
 
       this.columns.forEach(column => {
-        fields.push(column)
+        fields.push({
+          ...column,
+          ...mapTranslations(['label']),
+        })
       })
 
       fields.push({
@@ -285,9 +289,6 @@ export default {
       const selected = intersection(this.selected, map(this.localItems, 'id'))
 
       return selected.length === this.localItems.length
-    },
-    strings() {
-      return strings
     },
   },
 
@@ -351,7 +352,7 @@ export default {
       value.call(this, this.rowActions, item).forEach(action => {
         if (action === 'edit') {
           actions.push({
-            label: this.strings.table.action_edit,
+            label: this.$t('admin.table.action_edit'),
             handler: () => {
               this.onEditItem
                 ? this.onEditItem(item)
@@ -360,7 +361,7 @@ export default {
           })
         } else if (action === 'details') {
           actions.push({
-            label: this.strings.table.action_details,
+            label: this.$t('admin.table.action_details'),
             variant: 'light',
             handler: () => {
               this.onDetailsItem
@@ -370,7 +371,7 @@ export default {
           })
         } else if (action === 'delete') {
           actions.push({
-            label: this.strings.table.action_delete,
+            label: this.$t('admin.table.action_delete'),
             variant: 'danger',
             handler: () => {
               this.onDeleteItem
@@ -401,7 +402,7 @@ export default {
       value.call(this, this.bulkActions).forEach(action => {
         if (action === 'delete') {
           actions.push({
-            label: this.strings.table.action_delete_selected,
+            label: this.$t('admin.table.action_delete_selected'),
             variant: 'danger',
             handler: selected => {
               this.onBulkDelete
@@ -456,8 +457,8 @@ export default {
     defaultOnDeleteItem(item) {
       this.$alert
         .question(
-          this.strings.table.delete_confirmation_title,
-          this.strings.table.delete_confirmation,
+          this.$t('admin.table.delete_confirmation_title'),
+          this.$t('admin.table.delete_confirmation'),
           {
             showCancelButton: true,
           },
@@ -477,8 +478,8 @@ export default {
     defaultOnBulkDelete(selected) {
       this.$alert
         .question(
-          this.strings.table.delete_confirmation_title,
-          this.strings.table.delete_selected_confirmation,
+          this.$t('admin.table.delete_confirmation_title'),
+          this.$t('admin.table.delete_confirmation'),
           {
             showCancelButton: true,
           },

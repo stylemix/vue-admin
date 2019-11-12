@@ -3,7 +3,7 @@
     <fields layout="vertical" />
     <div class="form-group">
       <button type="submit" class="btn btn-primary btn-block">
-        {{ strings.auth.sign_in }}
+        {{ $t('admin.auth.sign_in') }}
         <i class="icon-circle-right2 ml-2"></i>
       </button>
     </div>
@@ -15,7 +15,6 @@ import { FormMixin } from 'stylemix-base'
 import Admin from '../../admin'
 import Config from '../../config'
 import AuthApi from './AuthApi'
-import strings from '../../strings'
 
 export default {
   name: 'LoginForm',
@@ -26,12 +25,6 @@ export default {
     return {
       model: {},
     }
-  },
-
-  computed: {
-    strings() {
-      return strings
-    },
   },
 
   mounted() {
@@ -45,6 +38,8 @@ export default {
         password: null,
       }
 
+      const $t = this.$t
+
       this.setFields([
         {
           component: 'text-field',
@@ -52,7 +47,7 @@ export default {
           type: 'email',
           required: true,
           get label() {
-            return strings.auth.email
+            return $t('admin.auth.email')
           },
         },
         {
@@ -60,7 +55,7 @@ export default {
           attribute: 'password',
           type: 'password',
           get label() {
-            return strings.auth.password
+            return $t('admin.auth.password')
           },
         },
       ])
@@ -82,17 +77,12 @@ export default {
             .dispatch('adminAuth/login', { token, expiresIn }, expiresIn)
             .then(() => {
               this.redirect()
-              return Admin.store.dispatch('.adminAuth/find')
+              return Admin.store.dispatch('adminAuth/find')
             })
         })
         .catch(response => {
           if (response.status === 422) {
             this.setValidationErrors(response.data.errors)
-            return
-          }
-
-          if (this.$toast && response.data && response.data.message) {
-            this.$toast && this.$toast.error(response.data.message)
           }
         })
 

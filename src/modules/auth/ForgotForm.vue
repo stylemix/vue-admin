@@ -3,17 +3,17 @@
     <fields layout="vertical" />
     <button type="submit" class="btn btn-info btn-block">
       <i class="icon-spinner11 mr-2"></i>
-      {{ strings.auth.forgot_submit }}
+      {{ $t('admin.auth.forgot_submit') }}
     </button>
   </form>
 </template>
 
 <script>
+import Vue from 'vue'
 import { FormMixin } from 'stylemix-base'
 import AuthApi from './AuthApi'
 import Admin from '../../admin'
 import AuthRoutesMixin from './AuthRoutesMixin'
-import strings from '../../strings'
 
 export default {
   name: 'ForgotForm',
@@ -24,12 +24,6 @@ export default {
     return {
       model: {},
     }
-  },
-
-  computed: {
-    strings() {
-      return strings
-    },
   },
 
   mounted() {
@@ -49,7 +43,7 @@ export default {
           type: 'email',
           required: true,
           get label() {
-            return strings.auth.email
+            return Vue.$t('admin.auth.email')
           },
         },
       ])

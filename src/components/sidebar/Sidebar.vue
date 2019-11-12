@@ -27,7 +27,7 @@ import SidebarMenu from './SidebarMenu'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Sidebar',
+  name: 'AdminSidebar',
   components: { SidebarMenu },
   props: {
     menu: {
@@ -36,9 +36,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('admin', {
-      navigation: 'navigation',
-    }),
+    ...mapState('admin', ['navigation']),
     menuResolved() {
       return this.menu || this.navigation
     },

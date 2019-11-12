@@ -10,25 +10,25 @@
       <span>{{ account.name }}</span>
     </template>
 
-    <template v-for="(action, index) in sortedMenu">
-      <div v-if="action.divider" :key="index" class="dropdown-divider"></div>
+    <template v-for="(item, index) in accountNavSorted">
+      <div v-if="item.divider" :key="index" class="dropdown-divider"></div>
       <b-dropdown-item
-        v-else-if="action.route"
+        v-else-if="item.route"
         :key="index"
-        :to="action.route"
-        @click="action.onClick && !action.route ? action.onClick(action) : ''"
+        :to="item.route"
+        @click="item.onClick && !item.route ? item.onClick(item) : ''"
       >
-        <i v-if="action.icon" :class="action.icon"></i>
-        {{ getItemText(action) }}
+        <i v-if="item.icon" :class="item.icon"></i>
+        {{ item.labelTranslated }}
       </b-dropdown-item>
       <b-dropdown-item
         v-else
         :key="index"
-        :href="action.path"
-        @click="action.onClick && !action.route ? action.onClick(action) : ''"
+        :href="item.path"
+        @click="item.onClick && !item.route ? item.onClick(item) : ''"
       >
-        <i v-if="action.icon" :class="action.icon"></i>
-        {{ getItemText(action) }}
+        <i v-if="item.icon" :class="item.icon"></i>
+        {{ item.labelTranslated }}
       </b-dropdown-item>
     </template>
   </b-nav-item-dropdown>
@@ -36,8 +36,7 @@
 
 <script>
 import sortBy from 'lodash-es/sortBy'
-import { mapGetters } from 'vuex'
-import Config from '../../config'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'AdminNavbarUser',
@@ -49,15 +48,10 @@ export default {
   },
 
   computed: {
+    ...mapState('admin', ['accountNav']),
     ...mapGetters('adminAuth', ['account']),
-    sortedMenu() {
-      return sortBy(Config.accountMenu, ['order'])
-    },
-  },
-
-  methods: {
-    getItemText(item) {
-      return typeof item.text === 'function' ? item.text(this) : item.text
+    accountNavSorted() {
+      return sortBy(this.accountNav, ['order'])
     },
   },
 }

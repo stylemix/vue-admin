@@ -4,12 +4,9 @@ import { mapState } from 'vuex'
 import Admin from '../../admin'
 import AuthStore from './store'
 import AuthConfig from './config'
-import AdminConfig from '../../facades/config'
 import LoginForm from './LoginForm'
-import strings from '../../strings'
 import LoginView from './LoginView'
 import ForgotView from './ForgotView'
-import RegisterView from './RegisterView'
 
 Admin.store.registerModule('adminAuth', AuthStore)
 
@@ -24,20 +21,6 @@ Admin.router.addRoutes([
     },
   },
 ])
-
-if (AuthConfig.withRegistration) {
-  Admin.router.addRoutes([
-    {
-      path: '/register',
-      name: AuthConfig.routes.register,
-      component: AuthConfig.registerForm || (() => import('./RegisterForm')),
-      meta: {
-        layout: RegisterView,
-        guest: true,
-      },
-    },
-  ])
-}
 
 if (AuthConfig.withForgot) {
   Admin.router.addRoutes([
@@ -116,19 +99,17 @@ Vue.mixin({
 
 Admin.hooks.addAction('bootstrap', 'adminAuth', function() {
   Admin.store.dispatch('adminAuth/check')
-})
 
-AdminConfig.pushAccountMenuItems([
-  {
-    order: 100,
-    onClick() {
-      if (AuthConfig.onLogout) {
-        AuthConfig.onLogout()
-      }
+  Admin.accountNav.append([
+    {
+      label: '$t.admin.auth.logout',
+      icon: 'icon-switch2',
+      order: 100,
+      onClick() {
+        if (AuthConfig.onLogout) {
+          AuthConfig.onLogout()
+        }
+      },
     },
-    icon: 'icon-switch2',
-    get text() {
-      return strings.auth.sign_out
-    },
-  },
-])
+  ])
+})
