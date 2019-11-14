@@ -47,7 +47,7 @@ if (AuthConfig.withHttpInterceptor) {
   Axios.interceptors.response.use(
     response => response,
     error => {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         Admin.store.dispatch('adminAuth/logout')
       }
 
@@ -97,7 +97,7 @@ Vue.mixin({
   },
 })
 
-Admin.hooks.addAction('bootstrap', 'adminAuth', function() {
+Admin.hooks.addAction('boot', 'adminAuth', function() {
   Admin.store.dispatch('adminAuth/check')
 
   Admin.accountNav.append([

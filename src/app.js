@@ -6,11 +6,6 @@ import Admin from './admin'
 
 const app = new Vue({
   /**
-   * Bind the Vue instance to the HTML.
-   */
-  el: '#app',
-
-  /**
    * The router.
    */
   router,
