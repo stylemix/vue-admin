@@ -5,6 +5,9 @@ import AccountConfig from './modules/account/config'
 import router from './router'
 import store from './store'
 import Menu from './facades/menu'
+import { addTranslationGroup, setCurrentLocale } from './utils/locales'
+
+const readyResolvers = []
 
 const Admin = {
   /**
@@ -57,7 +60,7 @@ const Admin = {
    * Use authentication module (login, register, forgot).
    * @param {Object} config
    */
-  useAuth(config) {
+  useAuth(config = {}) {
     Object.assign(AuthConfig, config)
     require('./modules/auth')
   },
@@ -66,9 +69,30 @@ const Admin = {
    * Use account module (account settings).
    * @param {Object} config
    */
-  useAccount(config) {
+  useAccount(config = {}) {
     Object.assign(AccountConfig, config)
     require('./modules/account')
+  },
+
+  /**
+   * Use language switcher.
+   */
+  useLanguageSwitcher() {
+    require('./modules/language-switcher')
+  },
+
+  /**
+   * Add translations group to load from API
+   */
+  addTranslationGroup,
+
+  /**
+   * Add promise resolver function for application ready state
+   *
+   * @param {Function} promiseResolver
+   */
+  readyUntil(promiseResolver) {
+    readyResolvers.push(promiseResolver)
   },
 
   /**
@@ -83,15 +107,20 @@ const Admin = {
     require('./plugins/alerts')
     require('./components/global')
 
+    // Locale could be changed in boot function
+    // We will setup locale as ready resolver (load messages, configure packages)
+    Admin.readyUntil(() => setCurrentLocale(store.state.admin.locale))
+
     // Run bootstrapper functions
-    Admin.hooks.doAction('bootstrap')
+    Admin.hooks.doAction('boot')
 
     Admin.app = require('./app').default
+    Promise.all(readyResolvers.map(resolver => resolver())).then(() => {
+      Admin.app.$mount('#app')
+    })
 
     return Admin.app
   },
-
-  install() {},
 
   /**
    * @deprecated

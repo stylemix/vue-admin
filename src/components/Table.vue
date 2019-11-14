@@ -3,13 +3,13 @@
     <div v-if="hasHeaderBar" class="card-header">
       <div v-show="selected.length" class="float-right">
         {{ $t('admin.table.selected', { count: selected.length }) }}
-        <b-dropdown variant="light" right text="Actions">
+        <b-dropdown variant="light" right :text="$t('admin.table.actions')">
           <b-dropdown-item
             v-for="(action, index) in buildBulkActions()"
             :key="index"
             @click.prevent="action.handler(selected)"
           >
-            {{ action.label }}
+            {{ action.labelTranslated }}
           </b-dropdown-item>
         </b-dropdown>
       </div>
@@ -38,7 +38,7 @@
         <template slot="table-colgroup">
           <slot name="table-colgroup" />
         </template>
-        <template slot="HEAD__checkbox">
+        <template v-slot:head(_checkbox)>
           <input
             :checked="isAllSelected"
             type="checkbox"
@@ -46,18 +46,18 @@
             @change="onSelectAll"
           />
         </template>
-        <template v-for="(column, key) in columns" :slot="`HEAD_${key}`">
-          <div :key="key">
-            {{ column.label || key }}
-          </div>
-        </template>
-        <template slot="_checkbox" slot-scope="{ item }">
+        <template v-slot:cell(_checkbox)="{ item }">
           <input v-model="selected" :value="item.id" type="checkbox" />
         </template>
         <template
-          v-for="column in columns"
-          :slot="column.key"
-          slot-scope="{ item }"
+          v-for="column in columnsResolved"
+          v-slot:[`head(${column.key})`]
+        >
+          {{ column.labelTranslated }}
+        </template>
+        <template
+          v-for="column in columnsResolved"
+          v-slot:[`cell(${column.key})`]="{ item }"
         >
           <component
             :is="column.component"
@@ -68,12 +68,12 @@
             :item="item"
           />
           <div v-if="!column.component" :key="column.key">
-            <slot :name="column.key" :column="column" :item="item">
+            <slot :name="`cell(${column.key})`" :column="column" :item="item">
               {{ $refs.table.getFormattedValue(item, column) }}
             </slot>
           </div>
         </template>
-        <template slot="_actions" slot-scope="{ item }">
+        <template v-slot:cell(_actions)="{ item }">
           <b-button
             v-for="(action, key) in buildRowActions(item)"
             :key="key"
@@ -82,7 +82,7 @@
             class="ml-1"
             @click="action.handler"
           >
-            {{ action.label }}
+            {{ action.labelTranslated }}
           </b-button>
           <slot :item="item" name="actions" />
         </template>
@@ -113,7 +113,7 @@ import map from 'lodash-es/map'
 import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './SearchForm.vue'
 import AdminApi from '../plugins/api'
-import { mapTranslations } from '../utils'
+import { addTranslators } from '../utils'
 
 function value(prop, ...args) {
   if (typeof prop === 'function') {
@@ -244,8 +244,17 @@ export default {
   },
 
   computed: {
+    columnsResolved() {
+      const columns = []
+
+      this.columns.forEach(column => {
+        columns.push(addTranslators(column, ['label']))
+      })
+
+      return columns
+    },
     fields() {
-      const fields = []
+      let fields = []
 
       if (this.hasBulkActions) {
         fields.push({
@@ -255,12 +264,7 @@ export default {
         })
       }
 
-      this.columns.forEach(column => {
-        fields.push({
-          ...column,
-          ...mapTranslations(['label']),
-        })
-      })
+      fields = fields.concat(this.columnsResolved)
 
       fields.push({
         key: '_actions',
@@ -352,7 +356,7 @@ export default {
       value.call(this, this.rowActions, item).forEach(action => {
         if (action === 'edit') {
           actions.push({
-            label: this.$t('admin.table.action_edit'),
+            label: '$t.admin.table.action_edit',
             handler: () => {
               this.onEditItem
                 ? this.onEditItem(item)
@@ -361,7 +365,7 @@ export default {
           })
         } else if (action === 'details') {
           actions.push({
-            label: this.$t('admin.table.action_details'),
+            label: '$t.admin.table.action_details',
             variant: 'light',
             handler: () => {
               this.onDetailsItem
@@ -371,7 +375,7 @@ export default {
           })
         } else if (action === 'delete') {
           actions.push({
-            label: this.$t('admin.table.action_delete'),
+            label: '$t.admin.table.action_delete',
             variant: 'danger',
             handler: () => {
               this.onDeleteItem
@@ -384,7 +388,7 @@ export default {
         }
       })
 
-      return actions
+      return actions.map(action => addTranslators(action, ['label']))
     },
 
     onSelectItem(item) {
@@ -402,7 +406,7 @@ export default {
       value.call(this, this.bulkActions).forEach(action => {
         if (action === 'delete') {
           actions.push({
-            label: this.$t('admin.table.action_delete_selected'),
+            label: '$t.admin.table.action_delete_selected',
             variant: 'danger',
             handler: selected => {
               this.onBulkDelete
@@ -415,12 +419,12 @@ export default {
         }
       })
 
-      return actions
+      return actions.map(action => addTranslators(action, ['label']))
     },
 
     onSelectAll() {
       if (this.isAllSelected) {
-        this.items.forEach(item => {
+        this.localItems.forEach(item => {
           const { id } = item
           if (this.selected.indexOf(id) !== -1) {
             this.selected.splice(this.selected.indexOf(id), 1)
@@ -429,7 +433,7 @@ export default {
         return
       }
 
-      this.items.forEach(item => {
+      this.localItems.forEach(item => {
         const { id } = item
         if (this.selected.indexOf(id) === -1) {
           this.selected.push(id)

@@ -14,12 +14,12 @@
     </a>
 
     <ul
-      v-if="menuItem.children.length > 0"
+      v-if="children.length > 0"
       class="nav nav-group-sub"
       :data-submenu-title="menuItem.labelTranslated"
     >
       <li
-        v-for="(child, index) in menuItem.children"
+        v-for="(child, index) in children"
         :key="child.id || index"
         class="nav-item"
         @click.stop="onItemClick(child)"
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { addTranslators } from '../../utils'
+
 export default {
   name: 'AdminSidebarMenuItem',
 
@@ -61,6 +63,12 @@ export default {
     return {
       menuItem: this.item,
     }
+  },
+
+  computed: {
+    children() {
+      return this.menuItem.children.map(item => addTranslators(item, ['label']))
+    },
   },
 
   methods: {

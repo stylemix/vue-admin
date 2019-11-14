@@ -27,6 +27,7 @@
       </b-navbar-nav>
       <slot name="extra-nav" />
       <b-navbar-nav class="ml-auto">
+        <language-switcher v-if="$store.state.languageSwitcher" />
         <navbar-user />
       </b-navbar-nav>
     </b-collapse>
@@ -36,10 +37,11 @@
 <script>
 import NavbarUser from './NavbarUser'
 import { mapState } from 'vuex'
+import LanguageSwitcher from '../../modules/language-switcher/LanguageSwitcher'
 
 export default {
   name: 'AdminNavbar',
-  components: { NavbarUser },
+  components: { LanguageSwitcher, NavbarUser },
   props: {
     logo: {
       type: String,

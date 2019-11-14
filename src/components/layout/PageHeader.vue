@@ -9,8 +9,8 @@
               class="icon-arrow-left52 mr-2"
               @click="$emit('clickBack')"
             />
-            {{ headerResolved }}
-            <small v-if="headerSmall">{{ headerSmall }}</small>
+            {{ titleResolved }}
+            <small v-if="titleSmall">{{ titleSmall }}</small>
           </h4>
         </slot>
         <a href class="header-elements-toggle text-default d-md-none">
@@ -29,7 +29,7 @@
           >
             <slot :name="action.id || index" :action="action">
               <i :class="`${action.icon} mr-2`"></i>
-              <span>{{ action.text }}</span>
+              <span>{{ action.labelTranslated }}</span>
             </slot>
           </b-button>
         </div>
@@ -40,6 +40,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { addTranslators } from '../../utils'
 
 export default {
   name: 'AdminPageHeader',
@@ -50,12 +51,12 @@ export default {
       default: null,
     },
 
-    header: {
+    title: {
       type: String,
       default: '',
     },
 
-    headerSmall: {
+    titleSmall: {
       type: String,
       default: '',
     },
@@ -67,14 +68,14 @@ export default {
   },
 
   computed: {
-    ...mapState('admin', {
-      pageActions: 'pageActions',
-    }),
-    headerResolved() {
-      return this.header || (this.$route.meta && this.$route.meta.title)
+    ...mapState('admin', ['pageTitle', 'pageActions']),
+    titleResolved() {
+      return this.title || this.pageTitle
     },
     actionsResolved() {
-      return this.actions || this.pageActions
+      return (this.actions || this.pageActions).map(action =>
+        addTranslators(action, ['label']),
+      )
     },
   },
 

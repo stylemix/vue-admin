@@ -1,43 +1,50 @@
 import Vue from 'vue'
 
-/**
- * Capitalize first letter of word
- * @param {string} input
- * @return {string}
- */
-export const capitalizeFirst = input => {
-  if (typeof input === 'string' && input.length)
-    return input[0].toUpperCase() + input.substr(1)
-  return input.toString()
+export function translate(string) {
+  if (typeof string !== 'string') {
+    return ''
+  }
+
+  return string.startsWith('$t.') ? Vue.$t(string.replace('$t.', '')) : string
 }
 
-function addTranslators(object, keys) {
+/**
+ * Add translated variants of for given properties
+ *
+ * @param {Object} object
+ * @param {String[]} keys
+ *
+ * @return {Object}
+ */
+export function addTranslators(object, keys) {
   keys.forEach(key => {
+    if (object.hasOwnProperty(`${key}Translated`)) {
+      return
+    }
     Object.defineProperty(object, `${key}Translated`, {
       get() {
-        if (typeof this[key] !== 'string') {
-          return this[key]
-        }
-
-        return this[key].startsWith('$t.')
-          ? Vue.$t(this[key].replace('$t.', ''))
-          : this[key]
+        return translate(this[key])
       },
     })
   })
+
+  return object
 }
 
 /**
- * Create getters from source object.
- * Getters will check value type for translation string
+ * Translate string properties which starts with special hint
  *
- * @param {String[]} keys Translatable property keys
+ * @param {Object} object
+ * @param {String[]} keys
+ *
+ * @return {Object}
  */
-export function mapTranslations(keys) {
-  const getters = {}
-  addTranslators(getters, keys)
+export function translateProps(object, keys) {
+  keys.forEach(key => {
+    object[key] = translate(object[key])
+  })
 
-  return getters
+  return object
 }
 
 /**

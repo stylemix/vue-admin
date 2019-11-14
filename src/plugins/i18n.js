@@ -23,7 +23,11 @@ i18n = new VueI18n({
   messages,
 })
 
-// Allow global access to translate function
+// Allow global access
+Vue.$i18n = i18n
 Vue.$t = (...args) => {
   return i18n.t(...args)
+}
+Vue.$tc = (...args) => {
+  return i18n.tc(...args)
 }
