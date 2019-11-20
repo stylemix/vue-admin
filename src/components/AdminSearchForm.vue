@@ -41,7 +41,6 @@ export default {
 
   created() {
     this.setFields(this.searchFields)
-    this.resetModel(this.model)
     this.$watch(
       'model',
       debounce(() => {

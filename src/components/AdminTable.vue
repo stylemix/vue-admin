@@ -230,7 +230,7 @@ export default {
       total: 0,
       page: 1,
       filter: null,
-      params: {},
+      params: this.searchData,
       editing: null,
     }
   },
