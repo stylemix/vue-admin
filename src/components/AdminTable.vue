@@ -31,6 +31,7 @@
         :filter="filter"
         :per-page="perPage"
         :current-page="page"
+        no-sort-reset
         show-empty
         small
       >
@@ -412,7 +413,7 @@ export default {
 
     onSelectAll() {
       if (this.isAllSelected) {
-        this.items.forEach(item => {
+        this.itemsLoaded.forEach(item => {
           const { id } = item
           if (this.selected.indexOf(id) !== -1) {
             this.selected.splice(this.selected.indexOf(id), 1)
@@ -421,7 +422,7 @@ export default {
         return
       }
 
-      this.items.forEach(item => {
+      this.itemsLoaded.forEach(item => {
         const { id } = item
         if (this.selected.indexOf(id) === -1) {
           this.selected.push(id)
