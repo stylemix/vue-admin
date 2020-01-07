@@ -1,19 +1,37 @@
 <template>
-  <div class="navbar navbar-expand-md navbar-dark">
+  <div class="navbar site-navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand">
       <router-link :to="logoRoute" class="d-inline-block">
-        <img :src="logo" alt="logo" />
+        <img :src="logo" alt="logo"/>
       </router-link>
     </div>
-    <div class="d-md-none d-flex">
+    <div class="d-md-none d-flex ml-auto mobile-nav">
+
+      <button
+        v-if="isAdmin"
+        @click="onShowDivisionBar"
+        type="button"
+        class="navbar-toggler lang-icon"
+      >
+        <i class="icon-map5"></i>
+      </button>
+
+      <button
+        type="button"
+        class="navbar-toggler lang-icon"
+        @click="onShowLangSwitcher"
+      >
+        <i class="icon-earth"></i>
+      </button>
+
       <button
         class="navbar-toggler"
         type="button"
         data-toggle="collapse"
         data-target="#navbar-mobile"
-        @click="showSubmenu = !showSubmenu"
+        @click="onShowSubmenu"
       >
-       <svg height="15pt" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" width="15pt"
+       <svg height="14pt" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" width="14pt"
             fill="white"
             xmlns="http://www.w3.org/2000/svg">
          <g transform="matrix(.1 0 0 -.1 0 512)">
@@ -35,7 +53,30 @@
       >
         <i class="icon-paragraph-justify3"></i>
       </button>
+
     </div>
+
+    <div
+      :class="{ 'show': showLangSwitcher }"
+      class="d-md-none collapse "
+      id="lang-switcher"
+    >
+      <div class="lang-switcher">
+        <slot name="lang-switcher"></slot>
+      </div>
+    </div>
+
+    <div
+      v-if="isAdmin"
+      :class="{ 'show': showDivisionBar }"
+      class="d-md-none collapse "
+      id="navbar-division"
+    >
+      <div class="navbar-division">
+        <slot name="navbar-division"></slot>
+      </div>
+    </div>
+
     <div
       :class="{ 'show': showSubmenu }"
       class="collapse navbar-collapse"
@@ -52,7 +93,8 @@
         </li>
       </ul>
       <div class="d-none d-md-flex">
-         <slot name="extra-nav" />
+         <slot name="lang-switcher" />
+         <slot name="navbar-division" />
       </div>
       <ul class="navbar-nav ml-auto user-info">
         <navbar-user></navbar-user>
@@ -68,15 +110,21 @@ import Config from '../../config'
 export default {
   name: 'Navbar',
   components: { NavbarUser },
-  data(){
+  data() {
     return {
-      showSubmenu: false
+      showSubmenu: false,
+      showLangSwitcher: false,
+      showDivisionBar: false
     }
   },
   props: {
     logo: {
       type: String,
       default: null,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -89,23 +137,106 @@ export default {
       if (found) classList.remove('sidebar-xs')
       else classList.add('sidebar-xs')
     },
-    onMobileClick(){
+    onMobileClick() {
       const classList = document.body.classList
       const found = classList.contains('sidebar-mobile-main')
       if (found) classList.remove('sidebar-mobile-main')
       else classList.add('sidebar-mobile-main')
+    },
+    onShowSubmenu() {
+      this.showSubmenu = !this.showSubmenu
+      this.showLangSwitcher = false
+      this.showDivisionBar = false
+    },
+    onShowLangSwitcher() {
+      this.showLangSwitcher = !this.showLangSwitcher
+      this.showSubmenu = false
+      this.showDivisionBar = false
+    },
+    onShowDivisionBar(){
+      this.showDivisionBar = !this.showDivisionBar
+      this.showSubmenu = false
+      this.showLangSwitcher = false
     }
   },
 }
 </script>
 <style lang="scss">
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
+
     .user-info {
       .navbar-nav-link.dropdown-toggle {
         display: none;
       }
+
       .dropdown-menu.dropdown-menu-right {
         display: block !important;
+      }
+    }
+    .lang-icon {
+      font-size: 17px !important;
+    }
+    .lang-switcher,
+    .navbar-division {
+      margin: 1.25rem 0;
+    }
+    .navbar-toggler + .navbar-toggler {
+      margin-left: 15px !important;
+    }
+
+    #lang-switcher,
+    #navbar-division{
+      width: 100%;
+      border-top: 1px solid rgba(255, 255, 255, .1);
+      margin: 0 -1.25rem;
+      padding: 0 1.25rem;
+      flex-grow: 1;
+      flex-basis: 100%;
+      .dropdown, .b-dropdown {
+        padding: .5rem 0;
+        border-radius: .1875rem;
+      }
+      .lang-switcher,
+      .navbar-division{
+        .navbar-nav {
+          margin-left: 0 !important;
+          .dropdown-toggle {
+            background-color: #fff;
+            box-shadow: none;
+            color: #333;
+          }
+          .dropdown {
+            width: 100%;
+            background-color: #fff;
+            .dropdown-menu {
+              &.show {
+                min-width: 100%;
+                top: 100% !important;
+                left: auto !important;
+                right: 0 !important;
+                transform: translate(0, 0) !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 350px){
+    .site-navbar {
+      .navbar-brand {
+        text-align: center;
+        margin: 0;
+        padding: 10px 0 0 0;
+        width: 100%;
+      }
+      .mobile-nav {
+        margin-right: auto;
+        button {
+          i, svg {
+            font-size: 20px;
+          }
+        }
       }
     }
   }
