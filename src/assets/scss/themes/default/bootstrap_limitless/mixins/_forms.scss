@@ -7,7 +7,7 @@
  * ---------------------------------------------------------------------------- */
 
 // Form control focus state
-@mixin form-control-focus() {
+@mixin form-control-focus($ignore-warning: false) {
     &:focus {
         outline: 0;
         @if $enable-shadows {
