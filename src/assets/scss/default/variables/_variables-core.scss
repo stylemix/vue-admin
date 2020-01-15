@@ -273,7 +273,7 @@ $font-family-monospace:      SFMono-Regular, Menlo, Monaco, Consolas, "Liberatio
 $font-family-base:           $font-family-sans-serif;
 
 // Font sizes
-//$font-size-base:             0.8125rem; // Assumes the browser default, typically `16px`
+$font-size-base:             0.875rem; // 14px Assumes the browser default, typically `16px`
 //$font-size-lg:               ($font-size-base + 0.0625rem);
 //$font-size-sm:               ($font-size-base - 0.0625rem);
 $font-size-xs:               ($font-size-base * 0.6875) !default;
@@ -825,11 +825,11 @@ $navbar-padding-x:                      $grid-gutter-width;
 
 $navbar-nav-link-padding-x:             1.25rem;
 
-$navbar-brand-font-size:                0;
+//$navbar-brand-font-size:                0;
 
 $nav-link-height:                       ($font-size-base * $line-height-base + $navbar-link-padding-y * 2);
 $navbar-brand-height:                   $navbar-brand-image-size;
-$navbar-brand-padding-y:                ($nav-link-height - $navbar-brand-height) / 2;
+//$navbar-brand-padding-y:                ($nav-link-height - $navbar-brand-height) / 2;
 
 $navbar-toggler-padding-y:              $navbar-link-padding-y;
 $navbar-toggler-padding-x:              0;
@@ -1234,3 +1234,7 @@ $pre-border-color:             $gray-400 !default;
 
 $print-page-size:         a3;
 $print-body-min-width:    map-get($grid-breakpoints, "lg");
+
+
+// Tweaks
+$enable-deprecation-messages: false;

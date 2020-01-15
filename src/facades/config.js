@@ -6,6 +6,14 @@ import AccountConfig from '../modules/account/config'
 import Admin from '../admin'
 
 export default {
+  setBrandName(name) {
+    return store.commit('adminConfig/brandName', name)
+  },
+
+  brandName() {
+    return store.state.adminConfig.brandName
+  },
+
   setLogo(url) {
     return store.commit('adminConfig/logoUrl', url)
   },

@@ -13,7 +13,11 @@
             <small v-if="titleSmall">{{ titleSmall }}</small>
           </h4>
         </slot>
-        <a href class="header-elements-toggle text-default d-md-none">
+        <a
+          href
+          class="header-elements-toggle text-default d-md-none"
+          @click.prevent
+        >
           <i class="icon-more"></i>
         </a>
       </div>

@@ -1,4 +1,5 @@
 import { setCurrentLocale } from '../utils/locales'
+import { calculateBodyClasses } from '../utils/layout'
 
 export default {
   namespaced: true,
@@ -8,6 +9,8 @@ export default {
     accountNav: [],
     pageTitle: '',
     pageActions: [],
+    sidebarXs: false,
+    sidebarMobile: false,
   },
   mutations: {
     locale: (state, locale) => (state.locale = locale),
@@ -21,6 +24,18 @@ export default {
       state[key] = items
     },
     pageTitle: (state, pageTitle) => (state.pageTitle = pageTitle),
+    sidebarXs(state, sidebarXs) {
+      state.sidebarXs = sidebarXs
+      calculateBodyClasses()
+    },
+    toggleSidebar(state) {
+      state.sidebarXs = !state.sidebarXs
+      calculateBodyClasses()
+    },
+    toggleSidebarMobile(state) {
+      state.sidebarMobile = !state.sidebarMobile
+      calculateBodyClasses()
+    },
   },
   actions: {
     setLocale({ commit }, locale) {

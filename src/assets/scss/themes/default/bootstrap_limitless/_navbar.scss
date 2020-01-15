@@ -300,7 +300,7 @@
                 
                 // Logo
                 .navbar-brand {
-                    min-width: $sidebar-base-width - $navbar-padding-x;
+                    min-width: $sidebar-base-width - $navbar-padding-x * 2;
                 }
 
                 // Highlight

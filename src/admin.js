@@ -2,10 +2,11 @@ import { createHooks } from '@wordpress/hooks'
 import ConfigFacade from './facades/config'
 import AuthConfig from './modules/auth/config'
 import AccountConfig from './modules/account/config'
-import router from './router'
+import router, { addDefaultRoutes } from './router'
 import store from './store'
 import Menu from './facades/menu'
 import { addTranslationGroup, setCurrentLocale } from './utils/locales'
+import { initLayout } from './utils/layout'
 
 const readyResolvers = []
 
@@ -99,6 +100,7 @@ const Admin = {
    * Run admin application. Includes required components and mounts root Vue instance.
    */
   run() {
+    require('./plugins/base')
     require('./plugins/bootstrap')
     require('./plugins/axios')
     require('./plugins/i18n')
@@ -106,6 +108,9 @@ const Admin = {
     require('./plugins/moment')
     require('./plugins/alerts')
     require('./components/global')
+
+    addDefaultRoutes()
+    initLayout()
 
     // Locale could be changed in boot function
     // We will setup locale as ready resolver (load messages, configure packages)

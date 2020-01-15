@@ -1,13 +1,16 @@
-import img from '../../assets/images/logo_light.png'
-
 export default {
+  /**
+   * Brand name for navbar
+   */
+  brandName: 'Admin console',
+
   /**
    * Default logo for navbar
    */
-  logoUrl: img,
+  logoUrl: null,
 
   /**
    * Default (home) route
    */
-  defaultRoute: null,
+  defaultRoute: { name: 'default' },
 }
