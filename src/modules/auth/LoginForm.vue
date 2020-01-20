@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { FormMixin } from 'stylemix-base'
 import Admin from '../../admin'
 import Config from '../../config'
@@ -38,8 +39,6 @@ export default {
         password: null,
       }
 
-      const $t = this.$t
-
       this.setFields([
         {
           component: 'text-field',
@@ -47,7 +46,7 @@ export default {
           type: 'email',
           required: true,
           get label() {
-            return $t('admin.auth.email')
+            return Vue.$t('admin.auth.email')
           },
         },
         {
@@ -55,7 +54,7 @@ export default {
           attribute: 'password',
           type: 'password',
           get label() {
-            return $t('admin.auth.password')
+            return Vue.$t('admin.auth.password')
           },
         },
       ])
