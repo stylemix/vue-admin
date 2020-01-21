@@ -1,6 +1,6 @@
 import { FormMixin } from 'stylemix-base'
 import isPlainObject from 'lodash-es/isPlainObject'
-import AdminApi from '../plugins/api'
+import AdminApi from '../classes/AdminApi'
 
 export default {
   mixins: [FormMixin],

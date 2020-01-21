@@ -43,7 +43,7 @@
 
 <script>
 import SignIn from '../../components/auth/auth-sign-in'
-import AuthRoutesMixin from './AuthRoutesMixin'
+import AuthRoutesMixin from './AuthFormMixin'
 import AuthConfig from './config'
 
 export default {

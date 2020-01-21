@@ -1,4 +1,4 @@
-import { classTranslations } from './index'
+import { classTranslations } from '../utils'
 
 /**
  * @property {String} label Item label

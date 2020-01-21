@@ -23,4 +23,10 @@ export default {
       }
     },
   },
+
+  methods: {
+    apiBuilder() {
+      return AuthConfig.apiBuilder()
+    },
+  },
 }

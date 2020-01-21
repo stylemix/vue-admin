@@ -112,7 +112,7 @@ import get from 'lodash-es/get'
 import map from 'lodash-es/map'
 import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './SearchForm.vue'
-import AdminApi from '../plugins/api'
+import AdminApi from '../classes/AdminApi'
 import { addTranslators } from '../utils'
 
 function value(prop, ...args) {

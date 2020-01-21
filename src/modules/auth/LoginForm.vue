@@ -15,12 +15,12 @@ import Vue from 'vue'
 import { FormMixin } from 'stylemix-base'
 import Admin from '../../admin'
 import Config from '../../config'
-import AuthApi from './AuthApi'
+import AuthFormMixin from './AuthFormMixin'
 
 export default {
   name: 'LoginForm',
 
-  mixins: [FormMixin],
+  mixins: [FormMixin, AuthFormMixin],
 
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
     onSubmit() {
       this.errors.clear()
 
-      const promise = new AuthApi()
+      const promise = this.apiBuilder()
         .login(this.model)
         .then(({ token, expires_in: expiresIn }) => {
           if (!token || !expiresIn) {

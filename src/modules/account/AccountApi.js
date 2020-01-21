@@ -1,17 +1,15 @@
-import AdminApi from '../../plugins/api'
+import { ApiBase } from 'stylemix-base'
 
-class AccountApi extends AdminApi {
+class AccountApi extends ApiBase {
   /**
    * The constructor for the ArtistProxy.
-   *
-   * @param {Object} parameters The query parameters.
    */
-  constructor(parameters = {}) {
-    super('account', parameters)
+  constructor() {
+    super('account')
   }
 
   user() {
-    return this.submit('GET', `${this.endpoint}`)
+    return this.request('GET', `/${this.endpoint}`)
   }
 }
 

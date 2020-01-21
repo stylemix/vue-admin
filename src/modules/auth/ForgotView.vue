@@ -35,7 +35,7 @@
 
 <script>
 import AuthForgot from '../../components/auth/auth-forgot'
-import AuthRoutesMixin from './AuthRoutesMixin'
+import AuthRoutesMixin from './AuthFormMixin'
 
 export default {
   name: 'ForgotView',

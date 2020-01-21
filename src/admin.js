@@ -63,7 +63,7 @@ const Admin = {
    */
   useAuth(config = {}) {
     Object.assign(AuthConfig, config)
-    require('./modules/auth')
+    require('./modules/auth/module')
   },
 
   /**
@@ -102,7 +102,6 @@ const Admin = {
   run() {
     require('./plugins/base')
     require('./plugins/bootstrap')
-    require('./plugins/axios')
     require('./plugins/i18n')
     require('./plugins/ui-blocker')
     require('./plugins/moment')

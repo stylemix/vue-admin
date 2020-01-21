@@ -1,4 +1,4 @@
-import MenuItem from '../utils/MenuItem'
+import MenuItem from '../classes/MenuItem'
 import store from '../store'
 
 export default class Menu {

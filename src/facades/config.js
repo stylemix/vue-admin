@@ -1,5 +1,4 @@
 import store from '../store'
-import AxiosConfig from '../plugins/axios/config'
 import Config from '../config'
 import AuthConfig from '../modules/auth/config'
 import AccountConfig from '../modules/account/config'
@@ -33,9 +32,7 @@ export default {
   /**
    * @deprecated
    */
-  useAxios(config = {}) {
-    Object.assign(AxiosConfig, config)
-  },
+  useAxios() {},
 
   /**
    * @deprecated

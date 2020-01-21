@@ -11,14 +11,13 @@
 <script>
 import Vue from 'vue'
 import { FormMixin } from 'stylemix-base'
-import AuthApi from './AuthApi'
 import Admin from '../../admin'
-import AuthRoutesMixin from './AuthRoutesMixin'
+import AuthFormMixin from './AuthFormMixin'
 
 export default {
   name: 'ForgotForm',
 
-  mixins: [FormMixin, AuthRoutesMixin],
+  mixins: [FormMixin, AuthFormMixin],
 
   data() {
     return {
@@ -52,7 +51,7 @@ export default {
     onSubmit() {
       this.errors.clear()
 
-      const promise = new AuthApi()
+      const promise = this.apiBuilder()
         .forgot(this.model.email)
         .then(result => {
           this.$alert.success(result.message)

@@ -1,13 +1,11 @@
-import Api from '../../plugins/api'
+import { ApiBase } from 'stylemix-base'
 
-class AuthApi extends Api {
+class AuthApi extends ApiBase {
   /**
-   * The constructor for the ArtistProxy.
-   *
-   * @param {Object} parameters The query parameters.
+   * The constructor for the AuthApi.
    */
-  constructor(parameters = {}) {
-    super('auth', parameters)
+  constructor() {
+    super('auth')
   }
 
   /**
@@ -25,21 +23,21 @@ class AuthApi extends Api {
       scope: '',
     }
 
-    return this.submit('post', `${this.endpoint}/login`, data)
+    return this.request('post', `${this.endpoint}/login`, data)
   }
 
   /**
    * Refresh token
    */
   refresh() {
-    return this.submit('post', `${this.endpoint}/refresh`)
+    return this.request('post', `${this.endpoint}/refresh`)
   }
 
   /**
    * Request for forgot password
    */
   forgot(email) {
-    return this.submit(
+    return this.request(
       'post',
       `${this.endpoint}/password/email`,
       { email },
@@ -49,17 +47,6 @@ class AuthApi extends Api {
         },
       },
     )
-  }
-
-  /**
-   * Method used to register the user.
-   *
-   * @param {Object} data The register data.
-   *
-   * @returns {Promise} The result in a promise.
-   */
-  register(data) {
-    return this.submit('post', `${this.endpoint}/register`, data)
   }
 }
 
