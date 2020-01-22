@@ -72,7 +72,7 @@ const Admin = {
    */
   useAccount(config = {}) {
     Object.assign(AccountConfig, config)
-    require('./modules/account')
+    require('./modules/account/module')
   },
 
   /**

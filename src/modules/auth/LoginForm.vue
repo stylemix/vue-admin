@@ -14,8 +14,8 @@
 import Vue from 'vue'
 import { FormMixin } from 'stylemix-base'
 import Admin from '../../admin'
-import Config from '../../config'
 import AuthFormMixin from './AuthFormMixin'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'LoginForm',
@@ -33,6 +33,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('adminAuth', ['login', 'find']),
     loadForm() {
       this.model = {
         email: null,
@@ -65,19 +66,11 @@ export default {
 
       const promise = this.apiBuilder()
         .login(this.model)
-        .then(({ token, expires_in: expiresIn }) => {
-          if (!token || !expiresIn) {
-            //eslint-disable-next-line
-            console.error('Failed to get token data from response')
-            return
-          }
-
-          return Admin.store
-            .dispatch('adminAuth/login', { token, expiresIn }, expiresIn)
-            .then(() => {
-              this.redirect()
-              return Admin.store.dispatch('adminAuth/find')
-            })
+        .then(result => {
+          return this.login(result).then(() => {
+            this.redirect()
+            return this.find()
+          })
         })
         .catch(response => {
           if (response.status === 422) {
@@ -96,9 +89,7 @@ export default {
         return
       }
 
-      if (Config.defaultRoute) {
-        Admin.router.push(Config.defaultRoute)
-      }
+      Admin.router.push(Admin.store.state.adminConfig.defaultRoute)
     },
   },
 }

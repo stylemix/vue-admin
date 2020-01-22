@@ -1,5 +1,4 @@
 import store from '../store'
-import Config from '../config'
 import AuthConfig from '../modules/auth/config'
 import AccountConfig from '../modules/account/config'
 import Admin from '../admin'
@@ -60,7 +59,6 @@ export default {
    * @deprecated
    */
   setAccountMenu(menu) {
-    Config.accountMenu = menu
     Admin.accountNav.set(menu)
   },
 

@@ -7,9 +7,8 @@
  */
 
 import * as types from './mutation-types'
-import AuthApi from '../AuthApi'
-import AccountApi from '../../account/AccountApi'
 import Admin from '../../../admin'
+import AuthConfig from '../config'
 
 let timer
 
@@ -33,10 +32,13 @@ function initRefresh(context) {
 
   clearTimeout(timer)
   timer = setTimeout(() => {
-    new AuthApi().refresh().then(({ token, expires_in: expiresIn }) => {
-      context.commit(types.LOGIN, { token, expiresIn })
-      initRefresh(context)
-    })
+    AuthConfig.apiBuilder()
+      .refresh()
+      .then(payload => {
+        validateTokenPayload(payload)
+        context.commit(types.LOGIN, payload)
+        initRefresh(context)
+      })
   }, timeout)
 }
 
@@ -52,12 +54,12 @@ export const check = context => {
 }
 
 export const find = context => {
-  return new AccountApi()
-    .user()
-    .then(result => {
-      context.commit('account', result.data)
+  return AuthConfig.apiBuilder()
+    .account()
+    .then(account => {
+      context.commit(types.ACCOUNT, account)
       Admin.hooks.doAction('authenticated')
-      return result.data
+      return account.data
     })
     .catch(rejection => {
       //eslint-disable-next-line
@@ -66,6 +68,7 @@ export const find = context => {
 }
 
 export const login = (context, payload) => {
+  validateTokenPayload(payload)
   context.commit(types.LOGIN, payload)
   initRefresh(context)
   return context.dispatch('find')
@@ -73,7 +76,18 @@ export const login = (context, payload) => {
 
 export const logout = ({ commit }) => {
   commit(types.LOGOUT)
+  commit(types.ACCOUNT, null)
   clearTimeout(timer)
+}
+
+function validateTokenPayload(payload) {
+  const { token, expires, expires_in } = payload
+  if (!token) {
+    throw new Error('Failed to get token data from response')
+  }
+  if (!expires && !expires_in) {
+    throw new Error('Failed to get token expiration')
+  }
 }
 
 export default {

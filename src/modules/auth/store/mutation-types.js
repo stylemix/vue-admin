@@ -7,14 +7,14 @@
  */
 
 export const CHECK = 'CHECK'
-export const FIND = 'FIND'
+export const ACCOUNT = 'ACCOUNT'
 export const REGISTER = 'REGISTER'
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 
 export default {
   CHECK,
-  FIND,
+  ACCOUNT,
   REGISTER,
   LOGIN,
   LOGOUT,

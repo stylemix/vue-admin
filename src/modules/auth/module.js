@@ -37,8 +37,9 @@ if (AuthConfig.withForgot) {
 }
 
 AuthConfig.onLogout = () => {
+  Admin.hooks.doAction('logout')
   Admin.store.dispatch('adminAuth/logout').then(() => {
-    Admin.store.commit('adminAuth/account', null)
+    Admin.hooks.doAction('logged-out')
     Admin.router.push({ name: AuthConfig.routes.login })
   })
 }
@@ -79,7 +80,7 @@ Admin.router.beforeEach((to, from, next) => {
      * If the user is authenticated and visits
      * an guest page, redirect to the dashboard page
      */
-    next(Admin.store.adminConfig.defaultRoute)
+    next(Admin.store.state.adminConfig.defaultRoute)
   } else {
     next()
   }
@@ -100,16 +101,14 @@ Vue.mixin({
 Admin.hooks.addAction('boot', 'adminAuth', function() {
   Admin.store.dispatch('adminAuth/check')
 
-  Admin.accountNav.append([
-    {
-      label: '$t.admin.auth.logout',
-      icon: 'icon-switch2',
-      order: 100,
-      onClick() {
-        if (AuthConfig.onLogout) {
-          AuthConfig.onLogout()
-        }
-      },
+  Admin.accountNav.push({
+    label: '$t.admin.auth.logout',
+    icon: 'icon-switch2',
+    order: 100,
+    onClick() {
+      if (AuthConfig.onLogout) {
+        AuthConfig.onLogout()
+      }
     },
-  ])
+  })
 })

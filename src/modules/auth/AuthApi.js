@@ -17,13 +17,10 @@ class AuthApi extends ApiBase {
    * @returns {Promise} The result in a promise.
    */
   login({ email, password }) {
-    const data = {
+    return this.request('post', `${this.endpoint}/login`, {
       email,
       password,
-      scope: '',
-    }
-
-    return this.request('post', `${this.endpoint}/login`, data)
+    })
   }
 
   /**
@@ -47,6 +44,13 @@ class AuthApi extends ApiBase {
         },
       },
     )
+  }
+
+  /**
+   * Request for authenticated account data
+   */
+  account() {
+    return this.request('get', 'account').then(result => result.data)
   }
 }
 

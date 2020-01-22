@@ -1,5 +1,4 @@
 import Admin from '../../admin'
-import AdminConfig from '../../facades/config'
 import AccountConfig from './config'
 
 Admin.router.addRoutes([
@@ -13,7 +12,7 @@ Admin.router.addRoutes([
   },
 ])
 
-AdminConfig.pushAccountMenuItem({
+Admin.accountNav.push({
   order: 10,
   route: {
     name: 'account',

@@ -7,7 +7,7 @@
  */
 
 import Vue from 'vue'
-import { CHECK, LOGIN, LOGOUT } from './mutation-types'
+import { CHECK, LOGIN, ACCOUNT, LOGOUT } from './mutation-types'
 import AuthConfig from '../config'
 
 const prefix = AuthConfig.storagePrefix || 'admin-console'
@@ -26,10 +26,15 @@ export default {
     }
   },
 
-  [LOGIN](state, { token, expiresIn }) {
+  [LOGIN](state, { token, expires, expires_in }) {
     state.authenticated = true
     state.token = token
-    state.expires = Date.now() + expiresIn * 1000
+    if (expires) {
+      state.expires = expires * 1000
+    }
+    if (expires_in) {
+      state.expires = Date.now() + expires_in * 1000
+    }
     localStorage.setItem(`${prefix}.user-token`, token)
     localStorage.setItem(`${prefix}.user-token-expires`, state.expires)
     if (Vue.$http) {
@@ -48,7 +53,7 @@ export default {
     }
   },
 
-  account(state, account) {
+  [ACCOUNT](state, account) {
     state.account = account
   },
 
