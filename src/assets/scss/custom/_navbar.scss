@@ -1,0 +1,22 @@
+.navbar-toggler {
+  width: $sidebar-mini-width;
+
+  &.sidebar-toggler {
+    margin-left: -$navbar-padding-x;
+  }
+
+  &.navbar-toggler-right {
+    margin-right: -$navbar-padding-x;
+  }
+}
+
+.navbar-brand {
+  width: $sidebar-base-width - $sidebar-mini-width;
+  min-width: auto !important;
+}
+
+body.sidebar-xs {
+  .navbar-brand {
+    display: none;
+  }
+}

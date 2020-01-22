@@ -1,19 +1,24 @@
 <template>
   <b-navbar type="dark" toggleable="md">
-    <button class="navbar-toggler" type="button" @click="toggleSidebarMobile">
+    <button
+      class="navbar-toggler sidebar-toggler"
+      type="button"
+      @click="toggleSidebarMobile"
+    >
+      <i class="icon-paragraph-justify3"></i>
+    </button>
+    <button
+      class="navbar-toggler sidebar-toggler d-none d-md-block"
+      type="button"
+      @click.prevent="toggleSidebar"
+    >
       <i class="icon-paragraph-justify3"></i>
     </button>
     <b-navbar-brand :to="defaultRoute">
       <img v-if="logoResolved" :src="logoResolved" :alt="brandName" />
       <span v-else>{{ brandName }}</span>
     </b-navbar-brand>
-    <b-navbar-nav class="d-none d-md-block">
-      <b-nav-item href="#" @click.prevent="toggleSidebar">
-        <i class="icon-arrow-left32 sidebar-collapse-handler"></i>
-        <i class="icon-arrow-right32 sidebar-expand-handler"></i>
-      </b-nav-item>
-    </b-navbar-nav>
-    <b-navbar-toggle target="navbar-collapse">
+    <b-navbar-toggle target="navbar-collapse" class="navbar-toggler-right">
       <i class="icon-more"></i>
     </b-navbar-toggle>
     <b-collapse id="navbar-collapse" is-nav>
