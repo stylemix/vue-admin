@@ -1,4 +1,5 @@
 import { createHooks } from '@wordpress/hooks'
+import Base from 'stylemix-base'
 import ConfigFacade from './facades/config'
 import AuthConfig from './modules/auth/config'
 import AccountConfig from './modules/account/config'
@@ -58,6 +59,22 @@ const Admin = {
   pageActions: new Menu('pageActions'),
 
   /**
+   * Defines $http endpoint if VUE_APP_API_BASE_URL env variable is defined
+   */
+  setupDefaultEndpoint() {
+    if (!process.env.VUE_APP_API_BASE_URL) {
+      return
+    }
+    Base.httpEndpoint('$http', {
+      baseUrl: process.env.VUE_APP_API_BASE_URL,
+    })
+  },
+
+  addDefaultRoutes,
+
+  initLayout,
+
+  /**
    * Use authentication module (login, register, forgot).
    * @param {Object} config
    */
@@ -108,8 +125,9 @@ const Admin = {
     require('./plugins/alerts')
     require('./components/global')
 
-    addDefaultRoutes()
-    initLayout()
+    Admin.setupDefaultEndpoint()
+    Admin.addDefaultRoutes()
+    Admin.initLayout()
 
     // Locale could be changed in boot function
     // We will setup locale as ready resolver (load messages, configure packages)
