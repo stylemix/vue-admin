@@ -6,7 +6,6 @@
  * account module.
  */
 
-import Vue from 'vue'
 import { CHECK, LOGIN, ACCOUNT, LOGOUT } from './mutation-types'
 import AuthConfig from '../config'
 
@@ -20,9 +19,7 @@ export default {
     state.authenticated = !!token
     if (state.authenticated) {
       state.expires = localStorage.getItem(`${prefix}.user-token-expires`)
-      if (Vue.$http) {
-        Vue.$http.defaults.headers.common.Authorization = `Bearer ${token}`
-      }
+      AuthConfig.setupToken({ token, expires: state.expires })
     }
   },
 
@@ -37,9 +34,8 @@ export default {
     }
     localStorage.setItem(`${prefix}.user-token`, token)
     localStorage.setItem(`${prefix}.user-token-expires`, state.expires)
-    if (Vue.$http) {
-      Vue.$http.defaults.headers.common.Authorization = `Bearer ${token}`
-    }
+
+    AuthConfig.setupToken({ token, expires: state.expires })
   },
 
   [LOGOUT](state) {
@@ -48,9 +44,8 @@ export default {
     state.expires = 0
     localStorage.removeItem(`${prefix}.user-token`)
     localStorage.removeItem(`${prefix}.user-token-expires`)
-    if (Vue.$http) {
-      Vue.$http.defaults.headers.common.Authorization = ''
-    }
+
+    AuthConfig.unsetToken()
   },
 
   [ACCOUNT](state, account) {

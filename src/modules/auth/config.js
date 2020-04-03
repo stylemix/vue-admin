@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import AuthApi from './AuthApi'
 
 const AuthConfig = {
@@ -9,6 +10,17 @@ const AuthConfig = {
   },
   apiBuilder() {
     return new AuthApi()
+  },
+  // eslint-disable-next-line no-unused-vars
+  setupToken: function({ token, expires }) {
+    if (Vue.$http) {
+      Vue.$http.defaults.headers.common.Authorization = `Bearer ${token}`
+    }
+  },
+  unsetToken: function() {
+    if (Vue.$http) {
+      Vue.$http.defaults.headers.common.Authorization = ''
+    }
   },
   loginForm: null,
   registerForm: null,

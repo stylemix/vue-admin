@@ -69,7 +69,6 @@ export default {
         .then(result => {
           return this.login(result).then(() => {
             this.redirect()
-            return this.find()
           })
         })
         .catch(response => {
