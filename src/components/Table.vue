@@ -17,6 +17,7 @@
         v-if="searchFields"
         :search-fields="searchFields"
         :search-data="searchData"
+        :search-clearable="searchClearable"
         @submit="onSearchHandler"
       />
     </div>
@@ -24,58 +25,59 @@
       <b-table
         ref="table"
         v-model="localItems"
+        v-bind="proxyPropsBindings"
         :fields="fields"
         :items="itemsProvider"
-        :sort-by="sortBy"
-        :sort-desc="sortDesc"
-        :filter="filter"
-        :per-page="perPage"
         :current-page="page"
-        :busy="busy"
-        show-empty
-        small
+        :no-select-on-click="rowClickAction !== 'select'"
+        :tbody-tr-class="tbodyTrClassComputed"
+        @row-selected="onRowSelected"
+        @row-clicked="onRowClicked"
       >
         <template slot="table-colgroup">
           <slot name="table-colgroup" />
         </template>
         <template v-slot:head(_checkbox)>
-          <input
+          <table-checkbox
+            :id="`${base}-checkbox-all`"
             :checked="isAllSelected"
-            type="checkbox"
-            @click.stop
-            @change="onSelectAll"
+            @change="toggleSelectAll"
           />
         </template>
-        <template v-slot:cell(_checkbox)="{ item }">
-          <input v-model="selected" :value="item.id" type="checkbox" />
+        <template v-slot:cell(_checkbox)="{ item, index }">
+          <table-checkbox
+            :id="`${base}-checkbox-${index}`"
+            :checked="isRowSelected(index)"
+            @change="toggleSelectRow(index)"
+          />
         </template>
         <template
           v-for="column in columnsResolved"
-          v-slot:[`head(${column.key})`]
+          v-slot:[`head(${column.key})`]="scope"
         >
-          {{ column.labelTranslated }}
+          <slot :name="`head(${column.key})`" v-bind="scope">
+            {{ column.labelTranslated }}
+          </slot>
         </template>
         <template
           v-for="column in columnsResolved"
-          v-slot:[`cell(${column.key})`]="{ item }"
+          v-slot:[`cell(${column.key})`]="scope"
         >
           <component
             :is="column.component"
             v-if="column.component"
             :key="column.key"
-            :attribute="column.key"
-            :config="column.config"
-            :item="item"
+            v-bind="column.componentProps(scope)"
           />
           <div v-if="!column.component" :key="column.key">
-            <slot :name="`cell(${column.key})`" :column="column" :item="item">
-              {{ $refs.table.getFormattedValue(item, column) }}
+            <slot :name="`cell(${column.key})`" v-bind="scope">
+              {{ $refs.table.getFormattedValue(scope.item, column) }}
             </slot>
           </div>
         </template>
-        <template v-slot:cell(_actions)="{ item }">
+        <template v-slot:cell(_actions)="scope">
           <b-button
-            v-for="(action, key) in buildRowActions(item)"
+            v-for="(action, key) in buildRowActions(scope.item)"
             :key="key"
             :variant="action.variant"
             size="sm"
@@ -84,9 +86,9 @@
           >
             {{ action.labelTranslated }}
           </b-button>
-          <slot :item="item" name="actions" />
+          <slot v-bind="scope" name="actions" />
         </template>
-        <template slot="row-details" slot-scope="row">
+        <template v-slot:row-details="row">
           <slot v-bind="row" name="row-details" />
         </template>
       </b-table>
@@ -106,14 +108,17 @@
   </div>
 </template>
 
+<style scoped>
+.table-responsive {
+  margin-bottom: 0;
+}
+</style>
+
 <script>
 import Vue from 'vue'
-import get from 'lodash-es/get'
-import map from 'lodash-es/map'
-import intersection from 'lodash-es/intersection'
 import AdminSearchForm from './SearchForm.vue'
-import AdminApi from '../classes/AdminApi'
 import { addTranslators } from '../utils'
+import TableCheckbox from './TableCheckbox'
 
 function value(prop, ...args) {
   if (typeof prop === 'function') {
@@ -123,10 +128,76 @@ function value(prop, ...args) {
   return prop
 }
 
+const proxyProps = [
+  'id',
+  'primaryKey',
+  'striped',
+  'bordered',
+  'borderless',
+  'outlined',
+  'dark',
+  'hover',
+  'small',
+  'fixed',
+  'responsive',
+  'stickyHeader',
+  'noBorderCollapse',
+  'captionTop',
+  'tableVariant',
+  'tableClass',
+  'stacked',
+  'headVariant',
+  'headRowVariant',
+  'theadClass',
+  'theadTrClass',
+  'footClone',
+  'footVariant',
+  'footRowVariant',
+  'tfootClass',
+  'tfootTrClass',
+  'tbodyTrClass',
+  'tbodyTrAttr',
+  'detailsTdClass',
+  'tbodyTransitionProps',
+  'tbodyTransitionHandlers',
+  'tbodyClass',
+  'filter',
+  'filterFunction',
+  'filterIgnoredFields',
+  'filterIncludedFields',
+  'sortBy',
+  'sortDesc',
+  'sortDirection',
+  'sortCompare',
+  'caption',
+  'captionHtml',
+  'perPage',
+  'selectable',
+  'selectMode',
+  'selectedVariant',
+  // 'noSelectOnClick',
+  'showEmpty',
+  'emptyText',
+  'emptyHtml',
+  'emptyFilteredText',
+  'emptyFilteredHtml',
+  'busy',
+]
+
+function proxyPropsConfig() {
+  const config = {}
+  proxyProps.forEach(prop => {
+    config[prop] = {}
+  })
+
+  return config
+}
+
 export default {
   name: 'AdminTable',
 
   components: {
+    TableCheckbox,
     AdminSearchForm,
   },
 
@@ -136,46 +207,24 @@ export default {
       default: () => [],
     },
     items: {
-      type: Array,
+      type: [Array, Function],
       default: null,
     },
     base: {
       type: String,
       required: true,
     },
-    apiBuilder: {
-      type: Function,
-      default: function() {
-        return new AdminApi(this.base || '')
-      },
-    },
-    beforeApiRequest: {
-      type: Function,
-      default: () => {},
-    },
-    busy: {
-      type: Boolean,
-      default: false,
-    },
-    sortBy: {
-      type: String,
-      default: null,
-    },
-    sortDesc: {
-      type: Boolean,
-      default: false,
-    },
     pagination: {
       type: Boolean,
       default: true,
     },
-    perPage: {
-      type: Number,
-      default: 15,
-    },
     rowActions: {
       type: [Array, Function],
-      default: () => ['edit', 'delete'],
+      default: () => [],
+    },
+    rowClickAction: {
+      type: String,
+      default: null,
     },
     onEditItem: {
       type: Function,
@@ -191,7 +240,7 @@ export default {
     },
     bulkActions: {
       type: [Array, Function],
-      default: () => ['delete'],
+      default: () => [],
     },
     onBulkDelete: {
       type: Function,
@@ -212,6 +261,10 @@ export default {
         ]
       },
     },
+    searchClearable: {
+      type: Boolean,
+      default: false,
+    },
     searchData: {
       type: Object,
       default: () => {
@@ -227,17 +280,15 @@ export default {
         $vm.reset()
       },
     },
+    ...proxyPropsConfig(),
   },
 
   data() {
     return {
-      config: {},
-      api: null,
       localItems: [],
       selected: [],
       total: 0,
       page: 1,
-      filter: null,
       params: {},
       editing: null,
     }
@@ -248,6 +299,13 @@ export default {
       const columns = []
 
       this.columns.forEach(column => {
+        // add defaults to column definition
+        column = {
+          componentProps(scope) {
+            return scope
+          },
+          ...column,
+        }
         columns.push(addTranslators(column, ['label']))
       })
 
@@ -256,11 +314,15 @@ export default {
     fields() {
       let fields = []
 
-      if (this.hasBulkActions) {
+      if (this.selectable) {
         fields.push({
           key: '_checkbox',
           label: '',
           sortable: false,
+          tdAttr: {
+            nowrap: 'nowrap',
+            width: '1%',
+          },
         })
       }
 
@@ -269,6 +331,7 @@ export default {
       fields.push({
         key: '_actions',
         label: '',
+        sortable: false,
         tdAttr: {
           nowrap: 'nowrap',
           width: '1%',
@@ -290,27 +353,38 @@ export default {
         return false
       }
 
-      const selected = intersection(this.selected, map(this.localItems, 'id'))
-
-      return selected.length === this.localItems.length
+      return this.selected.length === this.localItems.length
     },
-  },
+    tbodyTrClassComputed() {
+      if (this.rowClickAction) {
+        const classes = value(this.tbodyTrClass) || {}
+        if (classes instanceof Array) {
+          classes.push('cursor-pointer')
+        } else {
+          classes['cursor-pointer'] = true
+        }
 
-  created() {
-    this.initApi()
+        return classes
+      }
+
+      return this.tbodyTrClass
+    },
+    proxyPropsBindings() {
+      const values = {}
+      proxyProps.forEach(prop => {
+        values[prop] = this[prop]
+      })
+
+      return values
+    },
   },
 
   methods: {
-    initApi() {
-      this.api = this.apiBuilder()
-    },
-
     refresh() {
       this.$refs.table.refresh()
     },
 
     reset() {
-      this.initApi()
       if (this.page !== 1) {
         this.page = 1
       } else {
@@ -321,33 +395,18 @@ export default {
     },
 
     itemsProvider(ctx) {
-      if (this.items) {
+      if (this.items instanceof Array) {
+        this.total = this.items.length
         return this.items
       }
 
-      this.initApi()
-      this.api.setParameters(this.params)
-      this.api.setParameter('per_page', ctx.perPage)
-      this.api.setParameter('page', ctx.currentPage)
-
-      if (ctx.sortBy) {
-        this.api.setParameter('sort', {
-          [ctx.sortBy]: ctx.sortDesc ? 'desc' : 'asc',
-        })
-      } else {
-        this.api.removeParameter('sort')
+      if (this.items instanceof Function) {
+        ctx.params = { ...this.params }
+        ctx.setTotal = total => (this.total = total)
+        return this.items(ctx)
       }
 
-      this.beforeApiRequest(this.api, ctx)
-
-      return this.api
-        .all()
-        .then(result => {
-          this.total = get(result, 'meta.total', result.data.length)
-          this.$emit('api-result', result)
-          return result.data
-        })
-        .catch(() => [])
+      return []
     },
 
     buildRowActions(item) {
@@ -391,13 +450,46 @@ export default {
       return actions.map(action => addTranslators(action, ['label']))
     },
 
-    onSelectItem(item) {
-      const { id } = item
-      if (this.selected.indexOf(id) === -1) {
-        this.selected.push(id)
+    toggleSelectRow(index) {
+      const table = this.$refs.table
+      if (table.isRowSelected(index)) {
+        table.unselectRow(index)
       } else {
-        this.selected.splice(this.selected.indexOf(id), 1)
+        table.selectRow(index)
       }
+    },
+
+    selectRow(index) {
+      return this.$refs.table.selectRow(index)
+    },
+
+    unselectRow(index) {
+      return this.$refs.table.unselectRow(index)
+    },
+
+    selectAllRows() {
+      return this.$refs.table.selectAllRows()
+    },
+
+    clearSelected() {
+      return this.$refs.table.clearSelected()
+    },
+
+    isRowSelected(index) {
+      return this.$refs.table.isRowSelected(index)
+    },
+
+    onRowSelected(items) {
+      this.selected = items
+      this.$emit('row-selected', items)
+    },
+
+    toggleSelectAll() {
+      if (this.isAllSelected) {
+        return this.clearSelected()
+      }
+
+      return this.selectAllRows()
     },
 
     buildBulkActions() {
@@ -422,23 +514,16 @@ export default {
       return actions.map(action => addTranslators(action, ['label']))
     },
 
-    onSelectAll() {
-      if (this.isAllSelected) {
-        this.localItems.forEach(item => {
-          const { id } = item
-          if (this.selected.indexOf(id) !== -1) {
-            this.selected.splice(this.selected.indexOf(id), 1)
-          }
-        })
-        return
+    onRowClicked(item, index, event) {
+      switch (this.rowClickAction) {
+        case 'edit':
+          ;(this.onEditItem ? this.onEditItem : this.defaultOnEditItem)(item)
+          break
+        case 'details':
+          this.$set(item, '_showDetails', !item._showDetails)
+          break
       }
-
-      this.localItems.forEach(item => {
-        const { id } = item
-        if (this.selected.indexOf(id) === -1) {
-          this.selected.push(id)
-        }
-      })
+      this.$emit('row-clicked', item, index, event)
     },
 
     onSearchHandler(params) {
@@ -455,7 +540,7 @@ export default {
     },
 
     defaultOnDetailsItem(item) {
-      this.$set(item, '_showDetails', true)
+      this.$set(item, '_showDetails', !item._showDetails)
     },
 
     defaultOnDeleteItem(item) {

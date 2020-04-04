@@ -1,11 +1,25 @@
 <template>
   <form class="form-inline" @submit.prevent="">
-    <fields :fields="fields.all()" :model="model" layout="inline" />
-    <b-button variant="light" type="button" class="mb-2" @click.prevent="clear">
-      {{ $t('admin.table.search_clear') }}
-    </b-button>
+    <div class="form-inline-inner">
+      <fields :fields="fields.all()" :model="model" layout="inline" />
+      <b-button
+        v-if="clearable"
+        variant="light"
+        type="button"
+        class="mb-2"
+        @click.prevent="clear"
+      >
+        {{ $t('admin.table.search_clear') }}
+      </b-button>
+    </div>
   </form>
 </template>
+
+<style>
+.form-inline-inner {
+  margin-bottom: -0.65rem;
+}
+</style>
 
 <script>
 import { FormMixin } from 'stylemix-base'
@@ -23,6 +37,10 @@ export default {
       default: () => {
         return {}
       },
+    },
+    clearable: {
+      type: Boolean,
+      default: false,
     },
   },
 
