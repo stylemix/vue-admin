@@ -119,6 +119,7 @@ import Vue from 'vue'
 import AdminSearchForm from './SearchForm.vue'
 import { addTranslators } from '../utils'
 import TableCheckbox from './TableCheckbox'
+import { ApiResource } from 'stylemix-base'
 
 function value(prop, ...args) {
   if (typeof prop === 'function') {
@@ -212,7 +213,13 @@ export default {
     },
     base: {
       type: String,
-      required: true,
+      default: null,
+    },
+    apiBuilder: {
+      type: Function,
+      default() {
+        return new ApiResource(this.base || '')
+      },
     },
     pagination: {
       type: Boolean,
@@ -228,15 +235,27 @@ export default {
     },
     onEditItem: {
       type: Function,
-      default: null,
+      default(item) {
+        this.defaultOnEditItem(item)
+      },
     },
     onDetailsItem: {
       type: Function,
-      default: null,
+      default(item) {
+        this.defaultOnDetailsItem(item)
+      },
     },
     onDeleteItem: {
       type: Function,
-      default: null,
+      default(item) {
+        this.defaultOnDeleteItem(item)
+      },
+    },
+    deleteConfirmation: {
+      type: Function,
+      default() {
+        return this.defaultDeleteConfirmation()
+      },
     },
     bulkActions: {
       type: [Array, Function],
@@ -244,7 +263,15 @@ export default {
     },
     onBulkDelete: {
       type: Function,
-      default: null,
+      default(items) {
+        this.defaultOnBulkDelete(items)
+      },
+    },
+    bulkDeleteConfirmation: {
+      type: Function,
+      default() {
+        return this.defaultDeleteConfirmation()
+      },
     },
     searchFields: {
       type: Array,
@@ -275,8 +302,8 @@ export default {
     },
     onSearch: {
       type: Function,
-      default: function(params, $vm) {
-        $vm.params = params
+      default: function(searchParams, $vm) {
+        $vm.searchParams = searchParams
         $vm.reset()
       },
     },
@@ -289,7 +316,7 @@ export default {
       selected: [],
       total: 0,
       page: 1,
-      params: {},
+      searchParams: {},
       editing: null,
     }
   },
@@ -400,13 +427,20 @@ export default {
         return this.items
       }
 
+      ctx.searchParams = { ...this.searchParams }
+      ctx.setTotal = total => (this.total = total)
+
       if (this.items instanceof Function) {
-        ctx.params = { ...this.params }
-        ctx.setTotal = total => (this.total = total)
         return this.items(ctx)
       }
 
-      return []
+      const api = this.apiBuilder()
+      if (typeof api.table !== 'function') {
+        console.warn('Implement `table(context) method in your api resource')
+        return []
+      }
+
+      return api.table(ctx)
     },
 
     buildRowActions(item) {
@@ -416,31 +450,20 @@ export default {
         if (action === 'edit') {
           actions.push({
             label: '$t.admin.table.action_edit',
-            handler: () => {
-              this.onEditItem
-                ? this.onEditItem(item)
-                : this.defaultOnEditItem(item)
-            },
+            variant: 'light',
+            handler: () => this.onEditItem(item),
           })
         } else if (action === 'details') {
           actions.push({
             label: '$t.admin.table.action_details',
             variant: 'light',
-            handler: () => {
-              this.onDetailsItem
-                ? this.onDetailsItem(item)
-                : this.defaultOnDetailsItem(item)
-            },
+            handler: () => this.onDetailsItem(item),
           })
         } else if (action === 'delete') {
           actions.push({
             label: '$t.admin.table.action_delete',
             variant: 'danger',
-            handler: () => {
-              this.onDeleteItem
-                ? this.onDeleteItem(item)
-                : this.defaultOnDeleteItem(item)
-            },
+            handler: () => this.onDeleteItem(item),
           })
         } else {
           actions.push(action)
@@ -500,11 +523,7 @@ export default {
           actions.push({
             label: '$t.admin.table.action_delete_selected',
             variant: 'danger',
-            handler: selected => {
-              this.onBulkDelete
-                ? this.onBulkDelete(selected)
-                : this.defaultOnBulkDelete(selected)
-            },
+            handler: selected => this.onBulkDelete(selected),
           })
         } else {
           actions.push(action)
@@ -517,17 +536,17 @@ export default {
     onRowClicked(item, index, event) {
       switch (this.rowClickAction) {
         case 'edit':
-          ;(this.onEditItem ? this.onEditItem : this.defaultOnEditItem)(item)
+          this.onEditItem(item)
           break
         case 'details':
-          this.$set(item, '_showDetails', !item._showDetails)
+          this.onDetailsItem(item)
           break
       }
       this.$emit('row-clicked', item, index, event)
     },
 
-    onSearchHandler(params) {
-      this.onSearch(params, this)
+    onSearchHandler(searchParams) {
+      this.onSearch(searchParams, this)
     },
 
     defaultOnEditItem(item) {
@@ -543,48 +562,36 @@ export default {
       this.$set(item, '_showDetails', !item._showDetails)
     },
 
-    defaultOnDeleteItem(item) {
-      this.$alert
-        .question(
-          this.$t('admin.table.delete_confirmation_title'),
-          this.$t('admin.table.delete_confirmation'),
-          {
-            showCancelButton: true,
-          },
-        )
-        .then(result => {
-          if (!result.value) {
-            return
-          }
-          this.apiBuilder()
-            .destroy(item.id)
-            .then(() => {
-              this.refresh()
-            })
-        })
+    async defaultDeleteConfirmation() {
+      const { value } = await this.$alert.question(
+        this.$t('admin.table.delete_confirmation_title'),
+        this.$t('admin.table.delete_confirmation'),
+        { showCancelButton: true },
+      )
+      return value
     },
 
-    defaultOnBulkDelete(selected) {
-      this.$alert
-        .question(
-          this.$t('admin.table.delete_confirmation_title'),
-          this.$t('admin.table.delete_confirmation'),
-          {
-            showCancelButton: true,
-          },
-        )
-        .then(result => {
-          if (!result.value) {
-            return
-          }
+    async defaultOnDeleteItem(item) {
+      if (!(await this.deleteConfirmation(item))) {
+        return
+      }
 
-          this.apiBuilder()
-            .bulkDestroy(selected)
-            .then(() => {
-              this.selected = []
-              this.refresh()
-            })
-        })
+      this.apiBuilder()
+        .destroy(item.id)
+        .then(() => this.refresh())
+    },
+
+    async defaultOnBulkDelete(items) {
+      if (!(await this.bulkDeleteConfirmation(items))) {
+        return
+      }
+
+      const promises = items.map(item => this.apiBuilder().destroy(item.id))
+
+      Promise.all(promises).then(() => {
+        this.clearSelected()
+        this.refresh()
+      })
     },
   },
 }
