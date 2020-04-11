@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@wordpress/hooks": "^2.6.0",
+    "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
     "stylemix-base": "git+https://github.com/stylemix/vue-base.git#version-1.6",
     "vue": "^2.6.10",
