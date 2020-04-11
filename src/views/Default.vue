@@ -5,12 +5,8 @@
 </template>
 
 <script>
-import HasPageHeader from '../mixins/HasPageHeader'
-
 export default {
   name: 'Default',
-
-  mixins: [HasPageHeader],
 
   pageTitle() {
     return 'Default page'

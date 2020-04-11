@@ -14,5 +14,4 @@ export { default as AdminPageHeader } from './components/layout/PageHeader'
 export { default as AdminSearchForm } from './components/SearchForm'
 export { default as AdminTable } from './components/Table'
 export { default as ResourceFormMixin } from './mixins/ResourceFormMixin'
-export { default as HasPageHeader } from './mixins/HasPageHeader'
 export { utils, auth }

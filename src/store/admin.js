@@ -7,8 +7,6 @@ export default {
     locale: 'en',
     navigation: [],
     accountNav: [],
-    pageTitle: '',
-    pageActions: [],
     sidebarXs: false,
     sidebarMobile: false,
   },
@@ -23,7 +21,6 @@ export default {
     setMenuItems(state, { key, items }) {
       state[key] = items
     },
-    pageTitle: (state, pageTitle) => (state.pageTitle = pageTitle),
     sidebarXs(state, sidebarXs) {
       state.sidebarXs = sidebarXs
       calculateBodyClasses()

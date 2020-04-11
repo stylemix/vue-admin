@@ -18,6 +18,9 @@ const app = new Vue({
   mixins: Admin.hooks.applyFilters('mixins', []),
 
   beforeCreate() {
+    this.$refs = Vue.observable({
+      app: undefined,
+    })
     Admin.hooks.doAction('beforeCreate', this)
   },
 
@@ -54,7 +57,7 @@ const app = new Vue({
    *
    * @param {Function} h Will create an element.
    */
-  render: h => h(AdminApp),
+  render: h => h(AdminApp, { ref: 'app' }),
 })
 
 export default app

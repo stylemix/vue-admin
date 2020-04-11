@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { addTranslators } from '../../utils'
 
 export default {
@@ -72,10 +71,45 @@ export default {
   },
 
   computed: {
-    ...mapState('admin', ['pageTitle', 'pageActions']),
+    contentComponent() {
+      const root = this.$router.app
+      if (!root.$refs.app) {
+        return null
+      }
+
+      return root.$refs.app.$refs.content
+    },
+
+    pageTitle() {
+      let content = this.contentComponent
+      if (!content) {
+        return null
+      }
+
+      if (typeof content.$options.pageTitle === 'function') {
+        return content.$options.pageTitle.apply(content)
+      }
+
+      return content.$options.pageTitle
+    },
+
+    pageActions() {
+      let content = this.contentComponent
+      if (!content) {
+        return []
+      }
+
+      if (typeof content.$options.pageActions === 'function') {
+        return content.$options.pageActions.apply(content)
+      }
+
+      return content.$options.pageActions || []
+    },
+
     titleResolved() {
       return this.title || this.pageTitle
     },
+
     actionsResolved() {
       return (this.actions || this.pageActions).map(action =>
         addTranslators(action, ['label']),
